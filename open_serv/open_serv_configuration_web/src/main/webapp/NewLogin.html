@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+ <link rel="stylesheet" type="text/css" href="./component/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./theme/css/login.css" />
+    <script src="./component/jquery/jquery-1.11.0.min.js"></script>
+    <script src="./theme/js/encryption.js"></script>
+<body>
+<div class="box">
+    <div class="login-box">
+        <div class="login-title text-center">
+            <h1>
+                <small>系统登录</small>
+            </h1>
+        </div>
+        <div class="login-content">
+            <div id="errorTextarea"></div>
+            <div class="form">
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <div class="col-xs-12  ">
+                            <div class="input-group">
+                                <span class="input-group-addon">用户名 <span class="glyphicon glyphicon-user"></span></span> <input type="text" id="username" name="username" class="form-control"
+                                                                                                                                 placeholder="请输入用户名" />
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">密&emsp;码 <span class="glyphicon glyphicon-lock"></span></span> <input type="password" id="password" name="password"
+                                                                                                                                      class="form-control" placeholder="请输入密码" />
+                            </div>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <div class="col-xs-6 record">
+                            <div class="input-group">
+                                <label>记住我 <input type="checkbox" id="rememberMe" name="rememberMe" /></label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 record">
+                            <button type="button" id="btn_login" class="btn btn-sm btn-info">
+                                <span class="glyphicon glyphicon-off"></span> 登录
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+var authRootPath = "http://localhost:8080/open_serv_configuration";
+ //按下enter触发登录事件
+        $(document).keydown(function(event) {
+            if (event.keyCode == 13) {
+                $("#btn_login").click();
+            }
+        });
+        $("#btn_login").click(function() {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var checkCode = 0;
+            var isCheck = $('#rememberMe').is(':checked');
+            if (isCheck) {//如果选择
+                checkCode = 1;
+            }
+            var url = authRootPath + "/login/v1/querylogin.json";
+            var paramData = {};
+            paramData['userName'] = username;
+            paramData['userPass'] = password;
+            paramData['checkCode'] = isCheck;
+            $.support.cors = true;
+            $.ajax({
+                type : "post",
+                async : false,
+                data : paramData,
+                url : url,
+                //    contentType : "application/json; charset=utf-8",
+                dataType : 'json',
+                success : function(data) {
+                    var obj = data;
+                    if (obj.resultCode == "0") {
+                        window.location.href = "../../open_serv_configuration_web?tokenId=" + obj.tokenId+ "&checkCode=" + obj.checkCode;
+                    } else {
+                        alert(obj.resultInfo);
+                    }
+                },
+                error : function(data) {
+                    	console.log(data);
+                    	alert("登录失败");
+                }
+            });
+            
+        })
+ 
+</script>
+</html>

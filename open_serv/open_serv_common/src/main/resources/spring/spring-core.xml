@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd "
+    default-autowire="byName">
+
+    <!-- Spring应用上下文环境 -->
+    <bean class="com.dc.city.common.utils.ApplicationContextUtil"></bean>
+    <!-- 权限系统，用于获取访问路径中操作类型 -->
+    <bean class="com.dc.city.common.auth.tools.AuthApplicationContentTool"></bean>
+
+    <!-- 定义受环境影响易变的变量 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property
+            name="systemPropertiesModeName"
+            value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+        <property
+            name="ignoreResourceNotFound"
+            value="false" />
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 启用注解方式配置bean -->
+    <context:annotation-config />
+    <!--实现autowire注入 -->
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+
+    <!-- 设置使用注解的类所在的包路径 -->
+    <context:component-scan base-package="com.dc"></context:component-scan>
+ 
+    <!-- AOP拦截系统异常信息 -->
+    <!-- 过滤器拦截器 移动到city_output中的spring-core.xml 许滔
+    <aop:config>
+        <aop:aspect
+            id="aspect"
+            ref="loggerInterceptor">
+            <aop:around
+                pointcut="execution(* com.dc.city.controller..*.*(..))"
+                method="visitedLoggerInterceptor" />
+            <aop:after-throwing
+                pointcut="execution(* com.dc.city.controller..*.*(..))"
+                method="afterThrowing"
+                throwing="throwable" />
+            <aop:after
+                pointcut="execution(* com.dc.city.controller..*.*(..))"
+                method="afterOpreation" />
+        </aop:aspect>
+    </aop:config> -->
+</beans>

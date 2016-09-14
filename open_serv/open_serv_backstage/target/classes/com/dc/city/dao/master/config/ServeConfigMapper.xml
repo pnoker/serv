@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.config.ServeConfigMapper">
+    <resultMap id="BaseResultMap" type="com.dc.city.domain.config.ServeConfig">
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="PARENT_ID" property="parentId" jdbcType="DECIMAL" />
+        <result column="DATA_SOURCE_ID" property="dataSourceId" jdbcType="DECIMAL" />
+        <result column="SERVICE_NAME" property="serviceName" jdbcType="VARCHAR" />
+        <result column="SERVICE_CODE" property="serviceCode" jdbcType="VARCHAR" />
+        <result column="SERVICE_TYPE" property="serviceType" jdbcType="DECIMAL" />
+        <result column="TREE_LEVEL" property="treeLevel" jdbcType="DECIMAL" />
+        <result column="IS_SERVICE" property="isService" jdbcType="DECIMAL" />
+        <result column="QUERY_SQL" property="querySql" jdbcType="VARCHAR" />
+        <result column="CONFIG_REMARK" property="configRemark" jdbcType="VARCHAR" />
+        <result column="RESULT_FORMAT" property="resultFormat" jdbcType="VARCHAR" />
+        <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR" />
+        <result column="VERIFY_ACCESS" property="verifyAccess" jdbcType="DECIMAL" />
+        <result column="VERIFY_VIEW" property="verifyView" jdbcType="DECIMAL" />
+        <result column="VERIFY_IP" property="verifyIp" jdbcType="DECIMAL" />
+        <result column="REQUEST_EXAMPLE_URL" property="requestExampleUrl" jdbcType="VARCHAR" />
+        <result column="OTHER_INFO" property="otherInfo" jdbcType="VARCHAR" />
+        <result column="PUBLISH_REMARK" property="publishRemark" jdbcType="VARCHAR" />
+        <result column="TABLE_NAME" property="dataTableName" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP" />
+        <result column="SERVICE_STATUS" property="serviceStatus" jdbcType="DECIMAL" />
+        <result column="IS_DELETED" property="isDeleted" jdbcType="DECIMAL" />
+        <result column="IS_DATE_RANGE" property="isDateRange" jdbcType="DECIMAL" />
+        <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, PARENT_ID, DATA_SOURCE_ID, SERVICE_NAME, SERVICE_CODE, SERVICE_TYPE, TREE_LEVEL,
+        IS_SERVICE, 
+        (
+                CASE
+                WHEN QUERY_SQL_CLOB IS NOT NULL THEN
+                    QUERY_SQL_CLOB
+                ELSE
+                    To_Clob( QUERY_SQL)
+                END
+            ) QUERY_SQL,
+             CONFIG_REMARK, RESULT_FORMAT, REQUEST_METHOD, VERIFY_ACCESS,
+        VERIFY_VIEW, VERIFY_IP, REQUEST_EXAMPLE_URL, OTHER_INFO, PUBLISH_REMARK,TABLE_NAME,
+        CREATE_TIME,
+        PUBLISH_TIME, SERVICE_STATUS, IS_DELETED,IS_DATE_RANGE, UPDATETIME
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_CONFIG
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <update id="modifyGisPublishInfo">
+        update SERVE_CONFIG set SERVICE_STATUS = #{serviceStatus,jdbcType=DECIMAL}
+        where id=#{id,jdbcType=DECIMAL}
+    </update>
+    <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.dc.city.domain.config.ServeConfig">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_CONFIG
+        where 1 = 1
+        <if test="parentId > 0 ">
+            AND PARENT_ID = #{parentId,jdbcType=DECIMAL}
+        </if>
+        <if test="dataSourceId != null">
+            AND DATA_SOURCE_ID = #{dataSourceId,jdbcType=DECIMAL}
+        </if>
+        <if test="serviceName != null">
+            AND SERVICE_NAME = #{serviceName,jdbcType=VARCHAR}
+        </if>
+        <if test="serviceCode != null">
+            AND SERVICE_CODE = #{serviceCode,jdbcType=VARCHAR}
+        </if>
+        <if test="serviceType != null">
+            AND SERVICE_TYPE = #{serviceType,jdbcType=DECIMAL}
+        </if>
+        <if test="treeLevel != null">
+            AND TREE_LEVEL = #{treeLevel,jdbcType=DECIMAL}
+        </if>
+        <if test="serviceStatus != null ">
+            AND SERVICE_STATUS = #{serviceStatus,jdbcType=DECIMAL}
+        </if>
+        <if test="isDeleted != null">
+            AND IS_DELETED = #{isDeleted,jdbcType=DECIMAL}
+        </if>
+        ORDER BY IS_DELETED,ID DESC
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        delete from SERVE_CONFIG
+        where ID =
+        #{id,jdbcType=DECIMAL}
+    </delete>
+    <insert id="insert" parameterType="com.dc.city.domain.config.ServeConfig">
+        insert into SERVE_CONFIG (ID, PARENT_ID,
+        DATA_SOURCE_ID,
+        SERVICE_NAME, SERVICE_CODE, SERVICE_TYPE,
+        TREE_LEVEL, IS_SERVICE, QUERY_SQL,
+        CONFIG_REMARK, RESULT_FORMAT, REQUEST_METHOD,
+        VERIFY_ACCESS, VERIFY_VIEW, VERIFY_IP,
+        REQUEST_EXAMPLE_URL, OTHER_INFO, PUBLISH_REMARK,
+        CREATE_TIME, PUBLISH_TIME, SERVICE_STATUS,
+        IS_DELETED, UPDATETIME)
+        values (#{id,jdbcType=DECIMAL}, #{parentId,jdbcType=DECIMAL},
+        #{dataSourceId,jdbcType=DECIMAL},
+        #{serviceName,jdbcType=VARCHAR},
+        #{serviceCode,jdbcType=VARCHAR},
+        #{serviceType,jdbcType=DECIMAL},
+        #{treeLevel,jdbcType=DECIMAL}, #{isService,jdbcType=DECIMAL}, #{querySql,jdbcType=VARCHAR},
+        #{configRemark,jdbcType=VARCHAR}, #{resultFormat,jdbcType=VARCHAR},
+        #{requestMethod,jdbcType=VARCHAR},
+        #{verifyAccess,jdbcType=DECIMAL},
+        #{verifyView,jdbcType=DECIMAL},
+        #{verifyIp,jdbcType=DECIMAL},
+        #{requestExampleUrl,jdbcType=VARCHAR}, #{otherInfo,jdbcType=VARCHAR},
+        #{publishRemark,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{publishTime,jdbcType=TIMESTAMP},
+        #{serviceStatus,jdbcType=DECIMAL},
+        #{isDeleted,jdbcType=DECIMAL}, #{updatetime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" keyColumn="ID"
+        parameterType="com.dc.city.domain.config.ServeConfig">
+        insert into SERVE_CONFIG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="parentId != null">
+                PARENT_ID,
+            </if>
+            <if test="dataSourceId != null">
+                DATA_SOURCE_ID,
+            </if>
+            <if test="serviceName != null">
+                SERVICE_NAME,
+            </if>
+            <if test="serviceCode != null">
+                SERVICE_CODE,
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE,
+            </if>
+            <if test="treeLevel != null">
+                TREE_LEVEL,
+            </if>
+            <if test="isService != null">
+                IS_SERVICE,
+            </if>
+            <if test="querySql != null">
+                QUERY_SQL,
+            </if>
+              <if test="querySqlClob != null">
+                QUERY_SQL_CLOB,
+            </if>
+            <if test="configRemark != null">
+                CONFIG_REMARK,
+            </if>
+            <if test="resultFormat != null">
+                RESULT_FORMAT,
+            </if>
+            <if test="requestMethod != null">
+                REQUEST_METHOD,
+            </if>
+            <if test="verifyAccess != null">
+                VERIFY_ACCESS,
+            </if>
+            <if test="verifyView != null">
+                VERIFY_VIEW,
+            </if>
+            <if test="verifyIp != null">
+                VERIFY_IP,
+            </if>
+            <if test="requestExampleUrl != null">
+                REQUEST_EXAMPLE_URL,
+            </if>
+            <if test="otherInfo != null">
+                OTHER_INFO,
+            </if>
+            <if test="publishRemark != null">
+                PUBLISH_REMARK,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME,
+            </if>
+            <if test="serviceStatus != null">
+                SERVICE_STATUS,
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED,
+            </if>
+            <if test="isDateRange != null">
+                IS_DATE_RANGE,
+            </if>
+            <if test="dataTableName != null">
+                TABLE_NAME,
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME,
+            </if>
+             <if test="createUser != null">
+                CREATE_USER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+            <if test="parentId != null">
+                #{parentId,jdbcType=DECIMAL},
+            </if>
+            <if test="dataSourceId != null">
+                #{dataSourceId,jdbcType=DECIMAL},
+            </if>
+            <if test="serviceName != null">
+                #{serviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceCode != null">
+                #{serviceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                #{serviceType,jdbcType=DECIMAL},
+            </if>
+            <if test="treeLevel != null">
+                #{treeLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="isService != null">
+                #{isService,jdbcType=DECIMAL},
+            </if>
+            <if test="querySql != null">
+                #{querySql,jdbcType=VARCHAR},
+            </if>
+            <if test="querySqlClob != null">
+                #{querySqlClob},
+            </if>
+            <if test="configRemark != null">
+                #{configRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="resultFormat != null">
+                #{resultFormat,jdbcType=VARCHAR},
+            </if>
+            <if test="requestMethod != null">
+                #{requestMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="verifyAccess != null">
+                #{verifyAccess,jdbcType=DECIMAL},
+            </if>
+            <if test="verifyView != null">
+                #{verifyView,jdbcType=DECIMAL},
+            </if>
+            <if test="verifyIp != null">
+                #{verifyIp,jdbcType=DECIMAL},
+            </if>
+            <if test="requestExampleUrl != null">
+                #{requestExampleUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="otherInfo != null">
+                #{otherInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="publishRemark != null">
+                #{publishRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="serviceStatus != null">
+                #{serviceStatus,jdbcType=DECIMAL},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=DECIMAL},
+            </if>
+            <if test="isDateRange != null">
+                #{isDateRange,jdbcType=DECIMAL},
+            </if>
+            <if test="dataTableName != null">
+                #{dataTableName,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+             <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.dc.city.domain.config.ServeConfig">
+        update SERVE_CONFIG
+        <set>
+            <if test="parentId != null">
+                PARENT_ID = #{parentId,jdbcType=DECIMAL},
+            </if>
+            <if test="dataSourceId != null">
+                DATA_SOURCE_ID = #{dataSourceId,jdbcType=DECIMAL},
+            </if>
+            <if test="serviceName != null">
+                SERVICE_NAME = #{serviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceCode != null">
+                SERVICE_CODE = #{serviceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE = #{serviceType,jdbcType=DECIMAL},
+            </if>
+            <if test="treeLevel != null">
+                TREE_LEVEL = #{treeLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="isService != null">
+                IS_SERVICE = #{isService,jdbcType=DECIMAL},
+            </if>
+            <if test="querySql != null">
+                QUERY_SQL = #{querySql,jdbcType=VARCHAR},
+            </if>
+              <if test="querySqlClob != null">
+                QUERY_SQL_CLOB = #{querySqlClob},
+            </if>
+            <if test="configRemark != null">
+                CONFIG_REMARK = #{configRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="resultFormat != null">
+                RESULT_FORMAT = #{resultFormat,jdbcType=VARCHAR},
+            </if>
+            <if test="requestMethod != null">
+                REQUEST_METHOD = #{requestMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="verifyAccess != null">
+                VERIFY_ACCESS = #{verifyAccess,jdbcType=DECIMAL},
+            </if>
+            <if test="verifyView != null">
+                VERIFY_VIEW = #{verifyView,jdbcType=DECIMAL},
+            </if>
+            <if test="verifyIp != null">
+                VERIFY_IP = #{verifyIp,jdbcType=DECIMAL},
+            </if>
+            <if test="requestExampleUrl != null">
+                REQUEST_EXAMPLE_URL = #{requestExampleUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="otherInfo != null">
+                OTHER_INFO = #{otherInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="publishRemark != null">
+                PUBLISH_REMARK = #{publishRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME = #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="serviceStatus != null">
+                SERVICE_STATUS = #{serviceStatus,jdbcType=DECIMAL},
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+            </if>
+            <if test="isDateRange != null">
+                IS_DATE_RANGE = #{isDateRange,jdbcType=DECIMAL},
+            </if>
+            <if test="dataTableName != null">
+                TABLE_NAME = #{dataTableName,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.dc.city.domain.config.ServeConfig">
+        update SERVE_CONFIG
+        set PARENT_ID =
+        #{parentId,jdbcType=DECIMAL},
+        DATA_SOURCE_ID = #{dataSourceId,jdbcType=DECIMAL},
+        SERVICE_NAME
+        = #{serviceName,jdbcType=VARCHAR},
+        SERVICE_CODE = #{serviceCode,jdbcType=VARCHAR},
+        SERVICE_TYPE = #{serviceType,jdbcType=DECIMAL},
+        TREE_LEVEL = #{treeLevel,jdbcType=DECIMAL},
+        IS_SERVICE = #{isService,jdbcType=DECIMAL},
+        QUERY_SQL = #{querySql,jdbcType=VARCHAR},
+        CONFIG_REMARK = #{configRemark,jdbcType=VARCHAR},
+        RESULT_FORMAT =
+        #{resultFormat,jdbcType=VARCHAR},
+        REQUEST_METHOD = #{requestMethod,jdbcType=VARCHAR},
+        VERIFY_ACCESS = #{verifyAccess,jdbcType=DECIMAL},
+        VERIFY_VIEW =
+        #{verifyView,jdbcType=DECIMAL},
+        VERIFY_IP = #{verifyIp,jdbcType=DECIMAL},
+        REQUEST_EXAMPLE_URL
+        = #{requestExampleUrl,jdbcType=VARCHAR},
+        OTHER_INFO = #{otherInfo,jdbcType=VARCHAR},
+        PUBLISH_REMARK = #{publishRemark,jdbcType=VARCHAR},
+        CREATE_TIME =
+        #{createTime,jdbcType=TIMESTAMP},
+        PUBLISH_TIME = #{publishTime,jdbcType=TIMESTAMP},
+        SERVICE_STATUS = #{serviceStatus,jdbcType=DECIMAL},
+        IS_DELETED =
+        #{isDeleted,jdbcType=DECIMAL},
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+        where ID =
+        #{id,jdbcType=DECIMAL}
+    </update>
+    <insert id="createOutputParams">
+        insert into SERVE_OUTPUT_PARAM (SERVICE_ID,PARAM_CODE,PARAM_DESC,PARAM_TYPE)
+        <foreach collection="list" index="index" item="item" separator="union all">
+            select
+            #{item.serviceId},#{item.paramCode},#{item.paramDesc},#{item.paramType} from dual
+        </foreach>
+    </insert>
+    <insert id="createInputParams">
+        insert into SERVE_INPUT_PARAM (SERVICE_ID,PARAM_CODE,PARAM_DESC,PARAM_TYPE,IS_REQUIRED)
+        <foreach collection="list" index="index" item="item" separator="union all">
+            select
+            #{item.serviceId},#{item.paramCode},#{item.paramDesc},#{item.paramType},#{item.isRequired}
+            from
+            dual
+        </foreach>
+    </insert>
+    <insert id="createSegments">
+        insert into SERVE_SEGMENT (SERVICE_ID,SEGMENT_CODE,PARAM_CODE,REPLACE_SQL)
+        <foreach collection="list" index="index" item="item" separator="union all">
+            select
+            #{item.serviceId},#{item.segmentCode},#{item.paramCode},#{item.replaceSql} from dual
+        </foreach>
+    </insert>
+    <select id="queryOutputArgs" resultType="serveOutputParam">
+        select id ,SERVICE_ID serviceId ,PARAM_CODE
+        paramCode,
+        PARAM_DESC paramDesc,PARAM_TYPE
+        paramType
+        from SERVE_OUTPUT_PARAM
+        <if test="configerId != null">
+            where SERVICE_ID = #{configerId}
+        </if>
+    </select>
+    <select id="queryInputArgs" resultType="serveInputParam">
+        select id ,SERVICE_ID serviceId ,PARAM_CODE
+        paramCode,
+        PARAM_DESC paramDesc,PARAM_TYPE
+        paramType , IS_REQUIRED isRequired
+        from SERVE_INPUT_PARAM
+        <if test="configerId != null">
+            where SERVICE_ID = #{configerId}
+        </if>
+    </select>
+    <select id="querySegments" resultType="serveSegment">
+        select id ,SERVICE_ID serviceId ,SEGMENT_CODE
+        segmentCode,
+        PARAM_CODE paramCode,REPLACE_SQL
+        replaceSql
+        from SERVE_SEGMENT
+        <if test="configerId != null">
+            where SERVICE_ID = #{configerId}
+        </if>
+    </select>
+    <insert id="createOutputParamsNav">
+        insert into SERVE_NAV_OUT_PARAM (SERVICE_ID,COLUMN_CODE,COLUMN_DESC,COLUMN_ALIAS,SORT_ORDER)
+        <foreach collection="list" index="index" item="item" separator="union all">
+            select
+            #{item.serviceId},#{item.columnCode},#{item.columnDesc},#{item.columnLias},#{item.sortOrder,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+    <insert id="createInputParamsNav">
+        insert into SERVE_NAV_INPUT_PARAM
+        (SERVICE_ID,COLUMN_CODE,PARAM_CODE,COLUMN_DESC,OPERATOR,IS_REQUIRED)
+        <foreach collection="list" index="index" item="item" separator="union all">
+            select
+            #{item.serviceId},#{item.columnCode},#{item.paramCode},#{item.columnDesc},#{item.operator},#{item.isRequired}
+            from dual
+        </foreach>
+    </insert>
+    <insert id="createDateRangeArgs">
+        insert into SERVE_NAV_DATE_RANGE (SERVICE_ID,COLUMN_CODE,DATE_RANGE)
+        <foreach collection="list" index="index" item="item" separator="union all">
+            select
+            #{item.serviceId},#{item.columnCode},#{item.dataRange} from dual
+        </foreach>
+    </insert>
+    <select id="queryOutputArgsNav" resultType="serveOutputParamNav">
+        select id,SERVICE_ID serviceId,COLUMN_CODE columnCode,COLUMN_DESC columnDesc,
+        COLUMN_ALIAS
+        columnLias,SORT_ORDER sortOrder from SERVE_NAV_OUT_PARAM
+        <if test="configerId != null">
+            where SERVICE_ID = #{configerId}
+        </if>
+    </select>
+    <select id="queryInputArgsNavs" resultType="serveInputParamNav">
+        select id ,SERVICE_ID serviceId,COLUMN_CODE columnCode,PARAM_CODE paramCode,COLUMN_DESC
+        columnDesc,
+        IS_REQUIRED isRequired ,OPERATOR operator from SERVE_NAV_INPUT_PARAM
+        <if test="configerId != null">
+            where SERVICE_ID = #{configerId}
+        </if>
+    </select>
+    <select id="queryDateRangeArgs" resultType="serveDataRange">
+        select id,SERVICE_ID serviceId,COLUMN_CODE columnCode,DATE_RANGE dataRange
+        from
+        SERVE_NAV_DATE_RANGE
+        <if test="configerId != null">
+            where SERVICE_ID = #{configerId}
+        </if>
+    </select>
+    <select id="queryWhiteList" resultType="serveConfigWhiteList">
+        select id,SERVICE_ID serviceId,IP_ADDRESS ipAddress from SERVE_WHITE_LIST
+        <if test="configerId != null">
+            where SERVICE_ID = #{configerId}
+        </if>
+    </select>
+    <select id="queryConfigbyAuth" resultType="serveConfigAuth">
+        SELECT
+        SERVICE_CODE AS SERVICECODE,IS_SERVICE as
+        ISSERVICE,
+        NVL(VERIFY_ACCESS,0) AS VERIFYACCESS,
+        NVL(VERIFY_VIEW,0) AS VERIFYVIEW,
+        SUBSTR(SYS_CONNECT_BY_PATH(ID,','),2,LENGTH(SYS_CONNECT_BY_PATH(ID,','))) AS ALLPATH
+        FROM
+        SERVE_CONFIG
+        START WITH SERVE_CONFIG.ID = 1
+        CONNECT BY PRIOR ID= PARENT_ID
+    </select>
+    <select id="queryConfigIDbyCode" resultType="long">
+        select id from SERVE_CONFIG where
+        IS_DELETED=0 and SERVICE_CODE = #{serverCode}
+    </select>
+    <update id="updatePublishInfo" parameterType="com.dc.city.domain.config.ServeConfig">
+        update SERVE_CONFIG
+        set PUBLISH_REMARK =
+        #{publishRemark,jdbcType=VARCHAR},
+        VERIFY_ACCESS = #{verifyAccess,jdbcType=DECIMAL},
+        VERIFY_VIEW
+        = #{verifyView,jdbcType=DECIMAL},
+        VERIFY_IP =
+        #{verifyIp,jdbcType=DECIMAL},
+        REQUEST_EXAMPLE_URL = #{demoUrl,jdbcType=VARCHAR},
+        OTHER_INFO =
+        #{otherInfo,jdbcType=VARCHAR},
+        SERVICE_STATUS = #{serviceStatus,jdbcType=DECIMAL},
+        UPDATETIME
+        = SYSTIMESTAMP,
+        PUBLISH_TIME = SYSTIMESTAMP
+        where ID = #{configerId,jdbcType=DECIMAL}
+    </update>
+    <update id="removeConfigerById">
+        update SERVE_CONFIG set IS_DELETED = 1,SERVICE_CODE_EVER = SERVICE_CODE,SERVICE_CODE = NULL where ID =
+        #{configerId,jdbcType=DECIMAL}
+    </update>
+    <delete id="removeOutputParams">
+        delete from SERVE_OUTPUT_PARAM where SERVICE_ID =
+        #{configerId,jdbcType=DECIMAL}
+    </delete>
+    <delete id="removeInputParams">
+        delete from SERVE_INPUT_PARAM where SERVICE_ID =
+        #{configerId,jdbcType=DECIMAL}
+    </delete>
+    <delete id="removeSegments">
+        delete from SERVE_SEGMENT where SERVICE_ID = #{configerId,jdbcType=DECIMAL}
+    </delete>
+    <delete id="removeOutputParamsNav">
+        delete from SERVE_NAV_OUT_PARAM where SERVICE_ID =
+        #{configerId,jdbcType=DECIMAL}
+    </delete>
+    <delete id="removeInputParamsNav">
+        delete from SERVE_NAV_INPUT_PARAM where SERVICE_ID =
+        #{configerId,jdbcType=DECIMAL}
+    </delete>
+    <delete id="removeDateRangeArgs">
+        delete from SERVE_NAV_DATE_RANGE where SERVICE_ID =
+        #{configerId,jdbcType=DECIMAL}
+    </delete>
+    <!-- 记录服务的修改添加等日志的 -->
+    <insert id="createEditLog">
+        insert into SERVE_MODIFY_LOG(SERVICE_ID,OPERATOR_NAME,MODIFY_REMARK)
+        values(#{configerId,jdbcType=DECIMAL},#{operationName,jdbcType=VARCHAR},#{editMark,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="createWhiteList">
+        insert into SERVE_WHITE_LIST (SERVICE_ID,IP_ADDRESS)
+        <foreach collection="list" index="index" item="item" separator="union all">
+            select
+            #{item.serviceId},#{item.ipAddress} from dual
+        </foreach>
+    </insert>
+
+    <delete id="deleteWhites" parameterType="long">
+        delete from SERVE_WHITE_LIST
+        where SERVICE_ID =
+        #{serviceId,jdbcType=DECIMAL}
+    </delete>
+    <insert id="createJSONexamp" > 
+        insert into SERVE_RESULT_EXAMPLE ( SERVICE_ID,RESULT_TYPE,RESULT_EXAMPLE)
+        values(#{configerId,jdbcType=DECIMAL},#{type,jdbcType=VARCHAR}, #{jsonExamp,jdbcType=VARCHAR})
+    </insert>
+    <update id="modifyJSONexamp">
+        update SERVE_RESULT_EXAMPLE set  
+        RESULT_EXAMPLE = #{jsonExamp,jdbcType=VARCHAR},
+        UPDATETIME = SYSTIMESTAMP
+        where SERVICE_ID = #{configerId,jdbcType=DECIMAL}
+        and RESULT_TYPE = #{type,jdbcType=VARCHAR}
+    </update>
+    
+    <!-- 服务审核 -->
+    <update id="modifyServeReviewState">
+        update SERVE_CONFIG set SERVICE_STATUS = #{serviceStatus,jdbcType=DECIMAL}
+        where id=#{id,jdbcType=DECIMAL}
+    </update>
+    
+
+</mapper>

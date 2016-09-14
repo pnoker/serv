@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.config.ServeGisDictionaryMapper" >
+  <resultMap id="BaseResultMap" type="com.dc.city.domain.config.ServeGisDictionary" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CONFIG_ID" property="configId" jdbcType="DECIMAL" />
+    <result column="FILED_NAME" property="filedName" jdbcType="VARCHAR" />
+    <result column="FILED_TYPE" property="filedType" jdbcType="VARCHAR" />
+    <result column="FILED_LENGTH" property="filedLength" jdbcType="DECIMAL" />
+    <result column="DECIMAL_LENGTH" property="decimalLength" jdbcType="DECIMAL" />
+    <result column="IS_NULL" property="isNull" jdbcType="VARCHAR" />
+    <result column="FILED_DESC" property="filedDesc" jdbcType="VARCHAR" />
+    <result column="FIELD_REMARK" property="fieldRemark" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CONFIG_ID, FILED_NAME, FILED_TYPE, FILED_LENGTH, DECIMAL_LENGTH, IS_NULL, FILED_DESC, 
+    FIELD_REMARK, UPDATETIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long" >
+    select 
+    <include refid="Base_Column_List" />
+    from SERVE_GIS_DICTIONARY
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <select id="queryGisConfigerDictionary" resultMap="BaseResultMap" parameterType="long" >
+    select 
+    <include refid="Base_Column_List" />
+    from SERVE_GIS_DICTIONARY
+    where CONFIG_ID = #{configerId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="long" >
+    delete from SERVE_GIS_DICTIONARY
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="removeGisDictionaryParams">
+    delete from SERVE_GIS_DICTIONARY
+    where CONFIG_ID = #{configerId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.dc.city.domain.config.ServeGisDictionary" >
+    insert into SERVE_GIS_DICTIONARY (ID, CONFIG_ID, FILED_NAME, 
+      FILED_TYPE, FILED_LENGTH, DECIMAL_LENGTH, 
+      IS_NULL, FILED_DESC, FIELD_REMARK, 
+      UPDATETIME)
+    values (#{id,jdbcType=DECIMAL}, #{configId,jdbcType=DECIMAL}, #{filedName,jdbcType=VARCHAR}, 
+      #{filedType,jdbcType=VARCHAR}, #{filedLength,jdbcType=DECIMAL}, #{decimalLength,jdbcType=DECIMAL}, 
+      #{isNull,jdbcType=VARCHAR}, #{filedDesc,jdbcType=VARCHAR}, #{fieldRemark,jdbcType=VARCHAR}, 
+      #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dc.city.domain.config.ServeGisDictionary" >
+    insert into SERVE_GIS_DICTIONARY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="configId != null" >
+        CONFIG_ID,
+      </if>
+      <if test="filedName != null" >
+        FILED_NAME,
+      </if>
+      <if test="filedType != null" >
+        FILED_TYPE,
+      </if>
+      <if test="filedLength != null" >
+        FILED_LENGTH,
+      </if>
+      <if test="decimalLength != null" >
+        DECIMAL_LENGTH,
+      </if>
+      <if test="isNull != null" >
+        IS_NULL,
+      </if>
+      <if test="filedDesc != null" >
+        FILED_DESC,
+      </if>
+      <if test="fieldRemark != null" >
+        FIELD_REMARK,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+     
+      <if test="configId != null" >
+        #{configId,jdbcType=DECIMAL},
+      </if>
+      <if test="filedName != null" >
+        #{filedName,jdbcType=VARCHAR},
+      </if>
+      <if test="filedType != null" >
+        #{filedType,jdbcType=VARCHAR},
+      </if>
+      <if test="filedLength != null" >
+        #{filedLength,jdbcType=DECIMAL},
+      </if>
+      <if test="decimalLength != null" >
+        #{decimalLength,jdbcType=DECIMAL},
+      </if>
+      <if test="isNull != null" >
+        #{isNull,jdbcType=VARCHAR},
+      </if>
+      <if test="filedDesc != null" >
+        #{filedDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldRemark != null" >
+        #{fieldRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dc.city.domain.config.ServeGisDictionary" >
+    update SERVE_GIS_DICTIONARY
+    <set >
+      <if test="configId != null" >
+        CONFIG_ID = #{configId,jdbcType=DECIMAL},
+      </if>
+      <if test="filedName != null" >
+        FILED_NAME = #{filedName,jdbcType=VARCHAR},
+      </if>
+      <if test="filedType != null" >
+        FILED_TYPE = #{filedType,jdbcType=VARCHAR},
+      </if>
+      <if test="filedLength != null" >
+        FILED_LENGTH = #{filedLength,jdbcType=DECIMAL},
+      </if>
+      <if test="decimalLength != null" >
+        DECIMAL_LENGTH = #{decimalLength,jdbcType=DECIMAL},
+      </if>
+      <if test="isNull != null" >
+        IS_NULL = #{isNull,jdbcType=VARCHAR},
+      </if>
+      <if test="filedDesc != null" >
+        FILED_DESC = #{filedDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldRemark != null" >
+        FIELD_REMARK = #{fieldRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dc.city.domain.config.ServeGisDictionary" >
+    update SERVE_GIS_DICTIONARY
+    set CONFIG_ID = #{configId,jdbcType=DECIMAL},
+      FILED_NAME = #{filedName,jdbcType=VARCHAR},
+      FILED_TYPE = #{filedType,jdbcType=VARCHAR},
+      FILED_LENGTH = #{filedLength,jdbcType=DECIMAL},
+      DECIMAL_LENGTH = #{decimalLength,jdbcType=DECIMAL},
+      IS_NULL = #{isNull,jdbcType=VARCHAR},
+      FILED_DESC = #{filedDesc,jdbcType=VARCHAR},
+      FIELD_REMARK = #{fieldRemark,jdbcType=VARCHAR},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

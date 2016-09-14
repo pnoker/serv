@@ -1,0 +1,158 @@
+<div class="header-panel">
+    <span id="titleDiv" style="float: left">新增外部服务</span><a id="returnClick" href="javascript:;" style="float: right">返回></a>
+</div>
+<script type="text/javascript">
+    $("#returnClick").on("click",function(){
+       var url = "./pages/serviceManage/outer/list.html";
+       $("#digitalChinaCurrentUrl").val(url);
+        $("#tab-content-body").load(url);
+    });
+</script>
+<div class="container-fluid container-full">
+    <form class="form-horizontal" id="dismissEventForm">   
+        <div class="row-fluid form-group first-form-group">
+           <div class="row">
+                <label class="col-sm-2 control-label"><span class="required">*</span>选择服务目录:</label>
+                <div class="col-sm-10">
+                    <select id="serverMenu" class="form-control input-sm">
+                        <option value="1">目录1</option>
+                        <option value="2">目录2</option>
+                        <option value="3">目录3</option>
+                    </select>
+                </div>
+           </div>
+            <div class="row">
+              <label class="col-sm-2 control-label"><span class="required">*</span>接口地址:</label>
+               <div class="col-sm-10">
+                    <input id="serviceCode" class="form-control input-sm validate[required,maxSize[250],custom[url]]"/>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 control-label"><span class="required">*</span>服务名称:</label>
+               <div class="col-sm-10">
+                    <input id="serviceName" class="form-control input-sm validate[required,maxSize[50]]"/>
+              </div>
+            </div>
+             <div class="row">
+              <label class="col-sm-2 control-label"><span class="required">*</span>请求示例:</label>
+               <div class="col-sm-10">
+                    <input id="requestExampleUrl" class="form-control input-sm validate[required,maxSize[250],custom[url]]"/>
+              </div>
+            </div>             
+	       <div class="row">
+              <label class="col-sm-2 control-label"><span class="required">*</span>描     述:</label>
+               <div class="col-sm-10">
+                    <textarea id="configRemark" class="form-control validate[required,maxSize[250]]" rows="3" style="resize: none;"></textarea>
+              </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 control-label"><span class="required">*</span>请求方式：</label>
+                <div class="col-sm-4">
+                    <label class="checkbox-inline"> <input  class="validate[required] checkbox" type="checkbox" name="requestMethod" id="ckPOST" value="post"> POST
+                    </label> <label class="checkbox-inline"> <input  class="validate[required] checkbox" type="checkbox" name="requestMethod" id="ckGET" value="get"> GET
+                    </label>
+                </div>
+              </div>
+              <div class="row">
+                <label class="col-sm-2 control-label"><span class="required">*</span>返回格式：</label>
+                <div class="col-sm-4">
+                    <label class="checkbox-inline"> <input  class="validate[required] checkbox" type="checkbox" name="resultFormat" id="ckJSON" value="json"> JSON
+                    </label> <label class="checkbox-inline"> <input  class="validate[required] checkbox" type="checkbox" name="resultFormat" id="ckJXML" value="xml"> XML
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 control-label"><span class="required"></span>输入参数设置：</label>
+            
+                 <div class="col-sm-10">
+                    <div>
+                        <button class="add-row-btn" type="button" id="out-config-request-param-btn">
+                            <span>+</span>新建
+                        </button>
+                    </div>
+                    <table id="out-config-request-param" class="table table-striped table-hover table-bordered my-table" cellspacing="0" width="100%">
+                        <thead>
+                            <tr> 
+                                <th>URL参数</th>
+                                <th>类型</th> 
+                                <th>必填</th>
+                                <th>参数描述</th>
+                                <th class="delete-row">删除</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 control-label"><span class="required"></span>输出参数说明：</label>
+            
+                 <div class="col-sm-10">
+                    <div>
+                        <button class="add-row-btn" type="button" id="out-config-return-param-btn">
+                            <span>+</span>新建
+                        </button>
+                    </div>
+                    <table id="out-config-return-param" class="table table-striped table-hover table-bordered my-table" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>类型</th> 
+                                <th>参数说明</th>
+                                <th class="delete-row">删除</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+           <div class="row" id="JSONexampBox" style="display:none">
+              <label class="col-sm-2 control-label"><span class="required">*</span>JSON返回示例:</label>
+               <div class="col-sm-10">
+                    <textarea id="jsonExamp" class="form-control validate[required]" rows="5" style="resize: none;"></textarea>
+              </div>
+            </div>
+            <div class="row" id="XMLexampBox" style="display:none">
+              <label class="col-sm-2 control-label"><span class="required">*</span>XML返回示例:</label>
+               <div class="col-sm-10">
+                    <textarea id="xmlExamp" class="form-control validate[required]" rows="5" style="resize: none;"></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 control-label"><span class="required"></span>其它相关内容:</label>
+               <div class="col-sm-10">
+                    <textarea id="otherInfo" class="form-control" rows="5" style="resize: none;"></textarea>
+              </div>
+            </div>
+            <div id="out_update_log_row" class="row" >
+                <label class="col-sm-2 control-label">更新日志：</label>
+                <div class="col-sm-10">
+                    <textarea style="width: 100%;" class="validate[required]" rows="5" id="editRemark" name="editRemark" placeholder="请填写本次更新内容"></textarea>
+                </div>
+            </div>              
+            <div class="row btn-medium-blue-container">
+                <button id="saveBtn" class="btn-medium-blue" type="button">保&nbsp;&nbsp;&nbsp;存</button>
+            </div> 
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+var hasOutConfigId = getQueryString("configId");
+if(hasOutConfigId){
+    $("#titleDiv").text("修改外部服务");
+}else{
+    $("#titleDiv").text("新增外部服务");
+}
+$("#ckJSON").change(function(){
+    $("#JSONexampBox").css("display",($("#ckJSON").attr("checked")?"":"none"));
+});
+$("#ckJXML").change(function(){
+    $("#XMLexampBox").css("display",($("#ckJXML").attr("checked")?"":"none"));
+});
+var readOnly = getQueryString("readOnly");
+if(readOnly){
+    $("#saveBtn").css("display","none"); 
+    $("#titleDiv").text("外部服务");
+}
+//测试用
+//hasOutConfigId = 83;
+</script>
+<script src="pages/dataBaseManage/js/out.js"></script> 

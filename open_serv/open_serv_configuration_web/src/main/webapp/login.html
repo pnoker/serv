@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>登录页面</title>
+    <link rel="stylesheet" type="text/css" href="./component/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./theme/css/login.css" />
+    <script src="./component/jquery/jquery-1.11.0.min.js"></script>
+    <script src="./theme/js/encryption.js"></script>
+    <!--    <link rel="stylesheet" type="text/css" href=window.localStorage.authRootPath+"/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="${authRootPath}/css/login.css" />
+
+        <script src="${authRootPath}/js/encryption/encryption.js"></script>-->
+
+</head>
+
+
+<body>
+
+
+
+<div class="box">
+    <div class="login-box">
+        <div class="login-title text-center">
+            <h1>
+                <small>系统登录</small>
+            </h1>
+        </div>
+        <div class="login-content">
+            <div id="errorTextarea"></div>
+            <div class="form">
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <div class="col-xs-12  ">
+                            <div class="input-group">
+                                <span class="input-group-addon">用户名 <span class="glyphicon glyphicon-user"></span></span> <input type="text" id="username" name="username" class="form-control"
+                                                                                                                                 placeholder="请输入用户名" />
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">密&emsp;码 <span class="glyphicon glyphicon-lock"></span></span> <input type="password" id="password" name="password"
+                                                                                                                                      class="form-control" placeholder="请输入密码" />
+                            </div>
+                            <div class="input-group">
+                                <table>
+                                    <tr>
+                                        <td><span class="input-group-addon">验证码 <span class="glyphicon glyphicon-hand-right"></span></span></td>
+                                        <td><input type="text" id="verifyCode" name="verifyCode" class="form-control" placeholder="请输入验证码" /></td>
+                                        <td><img id="imgObj" alt="验证码" src="" /></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6 record">
+                            <div class="input-group">
+                                <label>记住我 <input type="checkbox" id="rememberMe" name="rememberMe" /></label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 record">
+                            <button type="button" id="btn_login" class="btn btn-sm btn-info">
+                                <span class="glyphicon glyphicon-off"></span> 登录
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    //var str = document.cookie;
+    var str=getCookie("tokenId");
+    //if (str.match("tokenId") != null) {
+    if(str!=null && str!=""){
+        location.href = "./";
+    } else {
+        //var authRootPath = "https://10.0.2.31:8443/auth_authority";
+        var authRootPath = "https://localhost:8080/auth_authority";
+        var visitToken='';
+        var sysCode='open_serv_configuration_web';
+        //$(".box").load(authRootPath + "/login/v1/loginView?sysCode=serv_configuration_web&authRootPath=" + authRootPath);
+        loadLoginPage();
+
+
+        $("#imgObj").attr("src",authRootPath+"/login/v1/queryvalidatecode?visitToken="+visitToken);
+
+        //按下enter触发登录事件
+        $(document).keydown(function(event) {
+            if (event.keyCode == 13) {
+                $("#btn_login").click();
+            }
+        });
+        var vImgurl = function() {
+            return authRootPath + '/login/v1/queryvalidatecode?visitToken=' + visitToken + "&" + Math.floor(Math.random() * 100);
+        }
+
+        var decToHex = function(str) {
+            var res = [];
+            for (var i = 0; i < str.length; i++)
+                res[i] = ("00" + str.charCodeAt(i).toString(16)).slice(-4);
+            return "\\u" + res.join("\\u");
+        }
+        var hexToDec = function(str) {
+            str = str.replace(/\\/g, "%");
+            return unescape(str);
+        }
+
+        /////////////////登录提交////////////////////////////
+        $("#btn_login").click(function() {
+            $("#btn_login").attr("disabled", true);
+            var username = $("#username").val();
+            var password = encode64($("#password").val());
+            var verifyCode = $("#verifyCode").val();
+            var checkCode = 0;
+            var isCheck = $('#rememberMe').is(':checked');
+            if (isCheck) {//如果选择
+                checkCode = 1;
+            }
+            var url = authRootPath + "/login/v1/querylogin";
+            var paramData = {};
+            paramData['userName'] = username;
+            paramData['userPass'] = password;
+            paramData['verifyCode'] = verifyCode;
+            paramData['checkCode'] = isCheck;
+            paramData['sysCode'] = sysCode;
+            paramData['verifyCodeToken'] = visitToken;
+            $.support.cors = true;
+            $.ajax({
+                type : "post",
+                async : false,
+                data : paramData,
+                url : url,
+                //    contentType : "application/json; charset=utf-8",
+                dataType : 'json',
+                success : function(data) {
+                    var obj = data;
+                    if (obj.resultCode == "0") {
+                        //如果返回成功时需要将tokenid与checkCode一起传输
+                        window.location.href = "../../" + sysCode + "/?tokenId=" + obj.tokenId + "&checkCode=" + obj.checkCode;
+                    } else {
+                        //登录不成功验证码需要重新获取
+                        $("#errorTextarea").empty();
+                        $("#errorTextarea").append('<p>' + hexToDec(obj.resultInfo) + '</p>');
+                        $("#verifyCode").val('');
+                        $("#imgObj").attr('src', vImgurl());
+                    }
+                    $("#btn_login").attr("disabled", false);
+                },
+                error : function(data) {
+                    if (data.resultInfo != undefined)
+                        alert(hexToDec(data.resultInfo));
+                    else {
+                        alert("服务请求失败");
+                    }
+                    $("#btn_login").attr("disabled", false);
+                }
+            });
+        });
+        $("#imgObj").click(function() {
+            $(this).attr('src', vImgurl());
+        });
+    }
+
+
+    function loadLoginPage(){
+        paramData={
+            'sysCode':sysCode,
+            'authRootPath':authRootPath
+        };
+        $.support.cors = true;
+        $.ajax({
+            type : "get",
+            async : false,
+            data : paramData,
+            url : authRootPath+'/login/v1/loginView.json',
+            //    contentType : "application/json; charset=utf-8",
+            dataType : 'json',
+            success : function(data) {
+                var obj = data;
+                if (obj!=null) {
+                    visitToken=data.visitToken;
+                    //$(".box").load("./pages/authorityPages/login/loginPage.html");
+                }
+            }/*,
+            error : function(data) {
+                alert('请求失败!');
+                window.location.href ="./login.html";
+            }*/
+        });
+    }
+
+
+</script>
+</html>

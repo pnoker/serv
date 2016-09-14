@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.config.ServeModifyLogMapper" >
+  <resultMap id="BaseResultMap" type="com.dc.city.domain.config.ServeModifyLog" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="SERVICE_ID" property="serviceId" jdbcType="DECIMAL" />
+    <result column="OPERATOR_ID" property="operatorId" jdbcType="DECIMAL" />
+    <result column="OPERATOR_NAME" property="operatorName" jdbcType="VARCHAR" />
+    <result column="MODIFY_REMARK" property="modifyRemark" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, SERVICE_ID, OPERATOR_ID, OPERATOR_NAME, MODIFY_REMARK, UPDATETIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long" >
+    select 
+    <include refid="Base_Column_List" />
+    from SERVE_MODIFY_LOG
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <select id="queryUpdateRecode" resultMap="BaseResultMap" parameterType="long" >
+   select 
+    <include refid="Base_Column_List" />
+    from SERVE_MODIFY_LOG
+    where SERVICE_ID = #{id,jdbcType=DECIMAL} ORDER BY ID DESC
+  
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="long" >
+    delete from SERVE_MODIFY_LOG
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.dc.city.domain.config.ServeModifyLog" >
+    insert into SERVE_MODIFY_LOG (ID, SERVICE_ID, OPERATOR_ID, 
+      OPERATOR_NAME, MODIFY_REMARK, UPDATETIME
+      )
+    values (#{id,jdbcType=DECIMAL}, #{serviceId,jdbcType=DECIMAL}, #{operatorId,jdbcType=DECIMAL}, 
+      #{operatorName,jdbcType=VARCHAR}, #{modifyRemark,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.dc.city.domain.config.ServeModifyLog" >
+    insert into SERVE_MODIFY_LOG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      ID,
+      <if test="serviceId != null" >
+        SERVICE_ID,
+      </if>
+      <if test="operatorId != null" >
+        OPERATOR_ID,
+      </if>
+      <if test="operatorName != null" >
+        OPERATOR_NAME,
+      </if>
+      <if test="modifyRemark != null" >
+        MODIFY_REMARK,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=DECIMAL},
+      <if test="serviceId != null" >
+        #{serviceId,jdbcType=DECIMAL},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=DECIMAL},
+      </if>
+      <if test="operatorName != null" >
+        #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyRemark != null" >
+        #{modifyRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dc.city.domain.config.ServeModifyLog" >
+    update SERVE_MODIFY_LOG
+    <set >
+      <if test="serviceId != null" >
+        SERVICE_ID = #{serviceId,jdbcType=DECIMAL},
+      </if>
+      <if test="operatorId != null" >
+        OPERATOR_ID = #{operatorId,jdbcType=DECIMAL},
+      </if>
+      <if test="operatorName != null" >
+        OPERATOR_NAME = #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyRemark != null" >
+        MODIFY_REMARK = #{modifyRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dc.city.domain.config.ServeModifyLog" >
+    update SERVE_MODIFY_LOG
+    set SERVICE_ID = #{serviceId,jdbcType=DECIMAL},
+      OPERATOR_ID = #{operatorId,jdbcType=DECIMAL},
+      OPERATOR_NAME = #{operatorName,jdbcType=VARCHAR},
+      MODIFY_REMARK = #{modifyRemark,jdbcType=VARCHAR},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd "
+    default-autowire="byName">
+
+
+    <!--初始化动态数据源，需要动态数据源的工程才需要配置 -->
+    <bean class="com.dc.city.listener.datasouce.InitDataSourceListener"></bean>
+    
+    <!-- 初始化配置表信息到本地内存-->
+    <bean class="com.dc.city.listener.config.InitLocalConfigerListener"></bean>
+    
+    <!--初始化黑名单-->
+    <bean class="com.dc.city.listener.securitymanage.BlackListInitDataListener"></bean>
+    
+    <bean name="cacheRefreshBlackList" class="com.dc.city.service.cache.impl.blacklist.CacheRefreshBlackList"></bean>
+    <bean name="cacheRefreshDataSource" class="com.dc.city.service.cache.impl.datasource.CacheRefreshDataSource"></bean>
+    <bean name="cacheRefreshServeConfig" class="com.dc.city.service.cache.impl.serve.CacheRefreshServeConfig"></bean>
+    
+    <!--监听数据更新 ,注入服务处理操作handler，key 为模块名称-->
+    <bean class="com.dc.city.listener.subscribe.SubCacheListener">
+        <property name="handlers">
+            <map key-type="java.lang.String">
+                <entry key="blackList"   value-ref="cacheRefreshBlackList"></entry>
+                <entry key="dataSource"  value-ref="cacheRefreshDataSource"></entry>
+                <entry key="serveConfig" value-ref="cacheRefreshServeConfig"></entry>
+            </map>
+        </property>
+    </bean>
+    
+
+    
+
+    
+
+</beans>

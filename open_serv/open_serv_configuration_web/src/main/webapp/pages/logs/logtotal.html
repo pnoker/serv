@@ -1,0 +1,124 @@
+<div class="container-fluid statistics-content">
+    <div class="row-fluid">
+        <div class="col-sm-2 statistics-left-menu">
+            <ul id="myTabstatis" class="nav nav-tabs page-sidebar-menu log-statistics-menu fl">
+                <li class="active modal-tab" style="float:none"><a href="#statisTotal" data-toggle="tab"> 总体统计</a></li>
+                <li class="modal-tab" style="float:none"><a href="#statisService"  data-toggle="tab"> 服务调用统计</a></li>
+                <li class="modal-tab" style="float:none"><a href="#statisUser"  data-toggle="tab">用户调用统计</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-10">
+            <div class="tab-content">
+                    <div class="tab-pane fade in container-fluid  active" id="statisTotal">
+                        <div id="chartInterfaceTatal" style="width:900px;height:500px">
+
+                        </div>
+                        <div id="chartInterfaceByService" style="width:900px;height:500px">
+
+                        </div>
+                        <div id="chartInterfaceByUserMonth" style="width:900px;height:500px">
+
+                        </div>
+                        <div id="chartInterfaceByIPaddress" style="width:900px;height:500px">
+
+                        </div>
+                    </div>
+                     <div class="tab-pane fade in container-fluid" id="statisService">
+                        <div id="pannelStatisService">
+                        </div>
+                        <div id="pannelStatisServiceChart">
+
+                        </div>
+                    </div>
+                     <div class="tab-pane fade in container-fluid" id="statisUser">
+                        <div id="pannelStatisUser">
+                        </div>
+                        <div id="pannelStatisUserChart">
+
+                        </div>
+                    </div>
+            </div>
+        </div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+
+//替换字符串  
+    function Replace(str, from, to) {
+        return str.split(from).join(to);
+    }
+    // 日期类型格式成指定的字符串
+    function FormatDate(date, format) {
+        format = Replace(format, "yyyy", date.getFullYear());
+        format = Replace(format, "MM", GetFullMonth(date));
+        format = Replace(format, "dd", GetFullDate(date));
+        return format;
+    }
+    //js日期字符串转换成日期类型
+    function parseDate(dateStr) {
+        return new Date(Replace(dateStr, "-", "/"));
+    }
+    //增加月  
+    function AddMonths(date, value) {
+        date.setMonth(date.getMonth() + value);
+        return date;
+    }
+    //增加天  
+    function AddDays(date, value) {
+        date.setDate(date.getDate() + value);
+        return date;
+    }
+    //增加时
+    function AddHours(date, value) {
+        date.setHours(date.getHours() + value);
+        return date;
+    }
+    //返回月份(两位数)  
+    function GetFullMonth(date) {
+        var v = date.getMonth() + 1;
+        if (v > 9) return v.toString();
+        return "0" + v;
+    }
+ 
+    //返回日(两位数)  
+    function GetFullDate(date) {
+        var v = date.getDate();
+        if (v > 9) return v.toString();
+        return "0" + v;
+    }
+    //返回时(两位数)
+    function GetFullHour(date) {
+        var v = date.getHours();
+        if (v > 9) return v.toString();
+        return "0" + v;
+    }
+    //比较两个时间
+    function compareDate() {
+        var mydate = AddDays(parseDate("2012-08-23"), 1);
+        var nowdate = new Date();
+        if (nowdate.getTime() < mydate.getTime()) {
+            return FormatDate(nowdate, "yyyy-MM-dd");
+        }
+        return FormatDate(mydate, "yyyy-MM-dd");
+    }
+    </script>
+<script src="pages/logs/js/interfaceTotal.js"></script>
+<script src="pages/logs/js/interfaceService.js"></script>
+<script src="pages/logs/js/interfaceUser.js"></script>
+<script src="pages/logs/js/interfaceIPaddress.js"></script>
+<script type="text/javascript">
+$(function() {
+    //按服务统计
+    var url = "./pages/serviceManage/inner/list.html?s_type=statis";
+    $("#digitalChinaCurrentUrl").val(url);
+    $("#pannelStatisService").load(url,function(){
+      //按用户统计,load方法是异步的，上一个加载完了再加载下一个按用户
+        var userUrl = "./pages/security/user/list.html?s_type=statis";
+        $("#digitalChinaCurrentUrl").val(userUrl);
+        $("#pannelStatisUser").load(userUrl);
+    });
+
+});
+</script>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.securitymanage.user.ServeUserAuthorityMapper" >
+  <resultMap id="BaseResultMap" type="com.dc.city.domain.securitymanage.user.ServeUserAuthority" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="USER_ID" property="userId" jdbcType="DECIMAL" />
+    <result column="SERVICE_ID" property="serviceId" jdbcType="DECIMAL" />
+    <result column="VIEW_PERMISSION" property="viewPermission" jdbcType="DECIMAL" />
+    <result column="ACCESS_PERMISSION" property="accessPermission" jdbcType="DECIMAL" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, USER_ID, SERVICE_ID, VIEW_PERMISSION, ACCESS_PERMISSION, UPDATETIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from SERVE_USER_AUTHORITY
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from SERVE_USER_AUTHORITY
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.dc.city.domain.securitymanage.user.ServeUserAuthority" >
+    insert into SERVE_USER_AUTHORITY (ID, USER_ID, SERVICE_ID, 
+      VIEW_PERMISSION, ACCESS_PERMISSION, UPDATETIME
+      )
+    values (#{id,jdbcType=DECIMAL}, #{userId,jdbcType=DECIMAL}, #{serviceId,jdbcType=DECIMAL}, 
+      #{viewPermission,jdbcType=DECIMAL}, #{accessPermission,jdbcType=DECIMAL}, #{updatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.dc.city.domain.securitymanage.user.ServeUserAuthority" >
+    insert into SERVE_USER_AUTHORITY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="serviceId != null" >
+        SERVICE_ID,
+      </if>
+      <if test="viewPermission != null" >
+        VIEW_PERMISSION,
+      </if>
+      <if test="accessPermission != null" >
+        ACCESS_PERMISSION,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="serviceId != null" >
+        #{serviceId,jdbcType=DECIMAL},
+      </if>
+      <if test="viewPermission != null" >
+        #{viewPermission,jdbcType=DECIMAL},
+      </if>
+      <if test="accessPermission != null" >
+        #{accessPermission,jdbcType=DECIMAL},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dc.city.domain.securitymanage.user.ServeUserAuthority" >
+    update SERVE_USER_AUTHORITY
+    <set >
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="serviceId != null" >
+        SERVICE_ID = #{serviceId,jdbcType=DECIMAL},
+      </if>
+      <if test="viewPermission != null" >
+        VIEW_PERMISSION = #{viewPermission,jdbcType=DECIMAL},
+      </if>
+      <if test="accessPermission != null" >
+        ACCESS_PERMISSION = #{accessPermission,jdbcType=DECIMAL},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dc.city.domain.securitymanage.user.ServeUserAuthority" >
+    update SERVE_USER_AUTHORITY
+    set USER_ID = #{userId,jdbcType=DECIMAL},
+      SERVICE_ID = #{serviceId,jdbcType=DECIMAL},
+      VIEW_PERMISSION = #{viewPermission,jdbcType=DECIMAL},
+      ACCESS_PERMISSION = #{accessPermission,jdbcType=DECIMAL},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

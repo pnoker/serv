@@ -1,0 +1,78 @@
+<div class="blank-div"></div>
+
+<div class="container-fluid">
+
+    <div class="row-fluid">
+
+        <div class="row">
+
+            <div class="col-sm-4">
+
+                <div class="span12">
+                    <input type="hidden" id="pid" value="0">
+                    <div id="cataLogTree"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="container-fluid">
+            <button id="editBtn" onclick="openEditCataLog()" style="display:none">编辑目录</button>
+            <button id="addBtn" onclick="openAddCataLog()" style="display:none">新增子目录</button>
+            <button id="delBtn" onclick="delCataLog()" style="display:none">删除目录</button>
+        </div>
+
+    </div>
+    
+    <!--弹窗表单demo-->
+    <div class="modal fade common-modal" id="cataLogModal" tabindex="-1" role="dialog" aria-labelledby="cancelEventLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="cataLogForm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <span class="modal-title">服务目录管理</span>
+                    </div>
+                    <div class="modal-body-container">
+                        <div class="modal-body">
+                            <form class="form-horizontal" role="form">
+                                <!--隐藏-->
+                                <input type="hidden" id="catalogId" name="catalogId" />
+                              <div class="form-group col-sm-12" >
+                                    <label for="sourceName" class="col-sm-2 control-label">父级目录</label>
+                                    <div class="col-sm-6">
+                                        <input type="hidden" name="parentId" id="parentId" queryParam="parentId">
+                                        <select disabled="disabled" class="form-control validate[custom[ipv4]]"  id="cataLogSelect">
+                                        </select>
+                                    </div>
+                              </div>
+                              <div class="form-group col-sm-12">
+                                    <label for="sourceName" class="col-sm-2 control-label">目录名称</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control validate[custom[ipv4]]" maxLength="10" id="catalogName" name="catalogName" placeholder="请输入服务名称">
+                                    </div>
+                              </div>
+                              <div class="form-group col-sm-12">
+                                    <label for="banReason" class="col-sm-2 control-label">目录备注</label>
+                                    <div class="col-sm-6">
+                                        <textarea rows="3" cols="60" id="catalogRemark" name="catalogRemark" maxlength="100"></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default btn-medium" onclick="submitCataLog()">确&nbsp;定</button>
+                            <input type="reset" class="btn btn-default btn-medium" value="清&nbsp;除">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT -->
+    </div>
+
+</div>
+
+<script src="pages/serviceManage/cataLog/js/js.js"></script>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.config.ServeConfigQueryMapper">
+    <resultMap id="BaseResultMap" type="com.dc.city.domain.config.ServeConfig">
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="PARENT_ID" property="parentId" jdbcType="DECIMAL" />
+        <result column="DATA_SOURCE_ID" property="dataSourceId" jdbcType="DECIMAL" />
+        <result column="SERVICE_NAME" property="serviceName" jdbcType="VARCHAR" />
+        <result column="SERVICE_CODE" property="serviceCode" jdbcType="VARCHAR" />
+        <result column="SERVICE_TYPE" property="serviceType" jdbcType="DECIMAL" />
+        <result column="TREE_LEVEL" property="treeLevel" jdbcType="DECIMAL" />
+        <result column="IS_SERVICE" property="isService" jdbcType="DECIMAL" />
+        <result column="QUERY_SQL" property="querySql" jdbcType="VARCHAR" />
+        <result column="CONFIG_REMARK" property="configRemark" jdbcType="VARCHAR" />
+        <result column="RESULT_FORMAT" property="resultFormat" jdbcType="VARCHAR" />
+        <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR" />
+        <result column="VERIFY_ACCESS" property="verifyAccess" jdbcType="DECIMAL" />
+        <result column="VERIFY_VIEW" property="verifyView" jdbcType="DECIMAL" />
+        <result column="VERIFY_IP" property="verifyIp" jdbcType="DECIMAL" />
+        <result column="REQUEST_EXAMPLE_URL" property="requestExampleUrl" jdbcType="VARCHAR" />
+        <result column="OTHER_INFO" property="otherInfo" jdbcType="VARCHAR" />
+        <result column="PUBLISH_REMARK" property="publishRemark" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP" />
+        <result column="SERVICE_STATUS" property="serviceStatus" jdbcType="DECIMAL" />
+        <result column="IS_DELETED" property="isDeleted" jdbcType="DECIMAL" />
+        <result column="IS_DATE_RANGE" property="isDateRange" jdbcType="DECIMAL" />
+        <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+        <result column="CREATE_USER" property="createUser" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, PARENT_ID, DATA_SOURCE_ID, SERVICE_NAME, SERVICE_CODE, SERVICE_TYPE, TREE_LEVEL,
+        IS_SERVICE, QUERY_SQL, CONFIG_REMARK, RESULT_FORMAT, REQUEST_METHOD, VERIFY_ACCESS,
+        VERIFY_VIEW, VERIFY_IP, REQUEST_EXAMPLE_URL, OTHER_INFO, PUBLISH_REMARK, CREATE_TIME,
+        PUBLISH_TIME, SERVICE_STATUS, IS_DELETED,IS_DATE_RANGE, UPDATETIME,CREATE_USER
+    </sql>
+
+    <select id="getTotalCount" resultType="long">
+        select count(1) from serve_config where 1 = 1
+        
+        <if test="dataSourceId != null and dataSourceId > 0">
+            AND DATA_SOURCE_ID = #{dataSourceId,jdbcType=DECIMAL}
+        </if>
+        <if test="serviceName != null">
+            <bind name="serviceName_pattern" value="serviceName + '%'" />
+            AND upper(SERVICE_NAME) like upper(#{serviceName_pattern})
+        </if>
+        <if test="serviceCode != null">
+           <bind name="servicCode_pattern" value="serviceCode + '%'" />
+            AND upper(SERVICE_CODE) like  upper(#{servicCode_pattern})
+        </if>
+        <if test="serviceType != null and serviceType > 0">
+            AND SERVICE_TYPE = #{serviceType,jdbcType=DECIMAL}
+        </if>
+        <if test="treeLevel != null">
+            AND TREE_LEVEL = #{treeLevel,jdbcType=DECIMAL}
+        </if>
+        <if test="serviceStatus != null and serviceStatus > -1">
+            AND SERVICE_STATUS = #{serviceStatus,jdbcType=DECIMAL}
+        </if>
+        <if test="isDeleted != null">
+            AND IS_DELETED = #{isDeleted,jdbcType=DECIMAL}
+        </if>
+        <if test="isService != null">
+            AND IS_SERVICE = #{isService,jdbcType=DECIMAL}
+        </if>
+        <!-- 模糊查找字段 -->
+        <if test="key != null and key!=''" >
+            <bind name="key_pattern" value="'%' + key + '%'" />
+            AND (upper(SERVICE_CODE) like  upper(#{key_pattern}) OR upper(SERVICE_NAME) LIKE   upper(#{key_pattern}))
+        </if>
+                <!-- 传入父id 进行递归查询 -->
+        <if test="parentId != null and parentId > 0 ">
+            START WITH ID = #{parentId} CONNECT BY PRIOR ID = PARENT_ID
+        </if>
+    </select>
+
+    <select id="queryPage" resultMap="BaseResultMap" resultType="serveConfigQueryPo">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_CONFIG esr
+        where esr.rowid in
+        (
+        select rid from
+        (
+        select rownum
+        rn,rid from
+        (
+        select rowid rid from SERVE_CONFIG
+        <where>
+        <if test="dataSourceId != null and dataSourceId > 0">
+            AND DATA_SOURCE_ID = #{dataSourceId,jdbcType=DECIMAL}
+        </if>
+        <if test="serviceName != null">
+            <bind name="serviceName_pattern" value="serviceName + '%'" />
+            AND upper(SERVICE_NAME) like upper(#{serviceName_pattern})
+        </if>
+        <if test="serviceCode != null">
+           <bind name="servicCode_pattern" value="serviceCode + '%'" />
+            AND upper(SERVICE_CODE) like  upper(#{servicCode_pattern})
+        </if>
+        <if test="serviceType != null and serviceType > 0">
+            AND SERVICE_TYPE = #{serviceType,jdbcType=DECIMAL}
+        </if>
+        <if test="treeLevel != null">
+            AND TREE_LEVEL = #{treeLevel,jdbcType=DECIMAL}
+        </if>
+        <if test="serviceStatus != null and serviceStatus > -1 ">
+            AND SERVICE_STATUS = #{serviceStatus,jdbcType=DECIMAL}
+        </if>
+        <if test="isDeleted != null">
+            AND IS_DELETED = #{isDeleted,jdbcType=DECIMAL}
+        </if>
+        <if test="isService != null">
+            AND IS_SERVICE = #{isService,jdbcType=DECIMAL}
+        </if>
+        <!-- 模糊查找字段 -->
+        <if test="key != null and key!=''" >
+            <bind name="key_pattern" value="'%' + key + '%'" />
+            AND (upper(SERVICE_CODE) like  upper(#{key_pattern}) OR upper(SERVICE_NAME) LIKE   upper(#{key_pattern}))
+        </if>
+        </where>
+        <!-- 传入父id 进行递归查询 -->
+        <if test="parentId != null and parentId > 0 ">
+            START WITH ID = #{parentId} CONNECT BY PRIOR ID = PARENT_ID
+        </if>
+            order by UPDATETIME desc
+        ) where  <![CDATA[  rownum < #{endRowNum} ]]> 
+        ) where rn >= #{beginRowNum}
+        )
+        order by esr.UPDATETIME desc
+    </select>
+    
+    <select id="queryAuthUserByConfig" resultType="Map">
+            select a.view_permission viewPer,a.access_permission accessPer ,b.id userid,b.user_name username from serve_user_authority a,serve_user b where  service_id =#{serviceId} and a.user_id = b.id
+    </select>
+    <select id="queryServiceListNum" resultType="serveCount">
+       select service_type serviceType,service_status serviceStatus,count(1) count from serve_config  where service_type in (1,2,3) 
+       and service_status in (0,1,2,3,4,5) and  IS_DELETED =0 group by service_type,service_status 
+       order by service_type,service_status 
+    </select>
+      <select id="fuzzyQuery" resultType="String">
+    select distinct txt from (
+         <foreach collection="list" item="item" index="index" separator="union ">
+          select to_char(${item}) txt from ${tableName}  
+        </foreach>
+    ) 
+    where 1=1 
+      <if test="query != null" >
+        <bind name="query_pattern" value="'%' + query + '%'" />
+         AND txt like  '${query_pattern}' 
+     </if>
+     <if test="matchNum != null" >
+        and   <![CDATA[  rownum <= ${matchNum} ]]> 
+     </if>
+  </select>
+</mapper>

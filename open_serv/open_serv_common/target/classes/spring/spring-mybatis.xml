@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd ">
+
+    <!-- spring atomikos 配置222222 -->
+
+    <!-- 主数据源 -->
+    <bean id="masterDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init"
+        destroy-method="close">
+        <description>masterDataSource</description>
+        <!-- Resource唯一名称 -->
+        <property name="uniqueResourceName">
+            <value>masterDS</value>
+        </property>
+        <!-- Resource数据库驱动 -->
+        <property name="xaDataSourceClassName">
+            <value>${master.atomikos.driverClassName}</value>
+        </property>
+        <property name="xaProperties">
+            <props>
+                <prop key="URL">${master.url}</prop>
+                <prop key="user">${master.username}</prop>
+                <prop key="password">${master.password}</prop>
+            </props>
+        </property>
+        <!--连接池数量 -->
+        <property name="minPoolSize">
+            <value>3</value>
+        </property>
+        <property name="maxPoolSize">
+            <value>30</value>
+        </property>
+    </bean>
+
+    <!-- 副数据源 -->
+    <bean id="reserveDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init"
+        destroy-method="close">
+        <description>reserveDataSource</description>
+        <!-- Resource唯一名称 -->
+        <property name="uniqueResourceName">
+            <value>reserveDS</value>
+        </property>
+        <!-- Resource数据库驱动 -->
+        <property name="xaDataSourceClassName">
+            <value>${reserve.atomikos.driverClassName}</value>
+        </property>
+        <property name="xaProperties">
+            <props>
+                <prop key="URL">${reserve.url}</prop>
+                <prop key="user">${reserve.username}</prop>
+                <prop key="password">${reserve.password}</prop>
+            </props>
+        </property>
+        <!--连接池数量 -->
+        <property name="minPoolSize">
+            <value>3</value>
+        </property>
+        <property name="maxPoolSize">
+            <value>30</value>
+        </property>
+    </bean>
+
+    <!-- 主 mybatis SessionFactory -->
+    <bean id="masterSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="masterDataSource" />
+        <property name="typeAliasesPackage" value="com.dc.city.domain,com.dc.city.pojo" />
+    </bean>
+    <!-- 副mybatis SessionFactory -->
+    <bean id="reserveSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="reserveDataSource" />
+        <property name="typeAliasesPackage" value="com.dc.city.domain,com.dc.city.pojo" />
+    </bean>
+
+    <!-- atomikos事务管理器 -->
+    <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager"
+        init-method="init" destroy-method="close">
+        <property name="forceShutdown">
+            <value>true</value>
+        </property>
+    </bean>
+    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
+        <property name="transactionTimeout" value="300" />
+    </bean>
+
+
+    <!-- 扫描主mapper -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.dc.city.dao.master;com.dc.city.common" />
+        <property name="sqlSessionFactoryBeanName" value="masterSqlSessionFactory" />
+    </bean>
+    <!-- 扫描副mapper -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.dc.city.dao.reserve" />
+        <property name="sqlSessionFactoryBeanName" value="reserveSqlSessionFactory" />
+    </bean>
+
+    <!-- spring 事务管理器 -->
+    <bean id="springTransactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+        <property name="transactionManager">
+            <ref bean="atomikosTransactionManager" />
+        </property>
+        <property name="userTransaction">
+            <ref bean="atomikosUserTransaction" />
+        </property>
+        <property name="allowCustomIsolationLevels" value="true" />
+    </bean>
+
+    <!-- 基本事务定义,使用transactionManager作事务管理,只有三种方法有写权限,其余方法按只读设置. -->
+    <tx:advice id="txAdvice" transaction-manager="springTransactionManager">
+        <tx:attributes>
+            <tx:method name="create*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+            <tx:method name="modify*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+            <tx:method name="remove*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+            <tx:method name="*" read-only="true" propagation="SUPPORTS" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 切面 -->
+    <aop:config proxy-target-class="true">
+        <aop:advisor pointcut="execution(public * com.dc..*service..*.*(..))"
+            advice-ref="txAdvice" />
+    </aop:config>
+
+
+
+    <!-- 事务（注解 ） -->
+    <!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
+
+</beans>

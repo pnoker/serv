@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd ">
+
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+
+    <!-- 配置动态数据源,通过initDataSourceListener进行初始化 -->
+    <bean id="dynamicDataSource" class="com.dc.city.common.datasource.DynamicDataSource"
+        lazy-init="true">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="masterDataSource" />
+    </bean>
+
+    <!-- 配置 NamedParameterJdbcTemplate，该对象可以使用具名参数。 但它没有无参构造器，所以必须为其制定构造参数，这里指定的是出c3p0数据源 -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dynamicDataSource"></constructor-arg>
+    </bean>
+
+</beans>

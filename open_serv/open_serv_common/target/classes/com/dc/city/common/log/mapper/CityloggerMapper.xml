@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.common.log.mapper.CityloggerMapper" >
+  <resultMap id="BaseResultMap" type="com.dc.city.common.log.domain.Citylogger" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="VISITEDIP" property="visitedip" jdbcType="VARCHAR" />
+    <result column="VISITEDURL" property="visitedurl" jdbcType="VARCHAR" />
+    <result column="PARAMTERS" property="paramters" jdbcType="VARCHAR" />
+    <result column="RESPONSEPARAMS" property="responseparams" jdbcType="VARCHAR" />
+    <result column="VISITEDHOST" property="visitedhost" jdbcType="VARCHAR" />
+    <result column="VISITEDUSER" property="visiteduser" jdbcType="VARCHAR" />
+    <result column="ERRINFO" property="errinfo" jdbcType="VARCHAR" />
+    <result column="VISITEDTIME" property="visitedtime" jdbcType="TIMESTAMP" />
+  
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.dc.city.common.log.domain.Citylogger" extends="BaseResultMap" >
+    <result column="RESPONSE_TEXT" property="responseText" jdbcType="CLOB" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, VISITEDIP, VISITEDURL, PARAMTERS, RESPONSEPARAMS, VISITEDHOST, VISITEDUSER, ERRINFO, 
+    VISITEDTIME
+  </sql>
+  <sql id="Blob_Column_List" >
+    RESPONSE_TEXT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from CITYLOGGER
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="long" >
+    delete from CITYLOGGER
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.dc.city.common.log.domain.Citylogger" >
+    insert into CITYLOGGER ( VISITEDIP, VISITEDURL, 
+      PARAMTERS, RESPONSEPARAMS, VISITEDHOST, 
+      VISITEDUSER, ERRINFO, VISITEDTIME, 
+      RESPONSE_TEXT)
+    values ( #{visitedip,jdbcType=VARCHAR}, #{visitedurl,jdbcType=VARCHAR}, 
+      #{paramters,jdbcType=VARCHAR}, #{responseparams,jdbcType=VARCHAR}, #{visitedhost,jdbcType=VARCHAR}, 
+      #{visiteduser,jdbcType=VARCHAR}, #{errinfo,jdbcType=VARCHAR}, #{visitedtime,jdbcType=TIMESTAMP}, 
+      #{responseText,jdbcType=CLOB})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dc.city.common.log.domain.Citylogger" >
+    insert into CITYLOGGER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      ID,
+      <if test="visitedip != null" >
+        VISITEDIP,
+      </if>
+      <if test="visitedurl != null" >
+        VISITEDURL,
+      </if>
+      <if test="paramters != null" >
+        PARAMTERS,
+      </if>
+      <if test="responseparams != null" >
+        RESPONSEPARAMS,
+      </if>
+      <if test="visitedhost != null" >
+        VISITEDHOST,
+      </if>
+      <if test="visiteduser != null" >
+        VISITEDUSER,
+      </if>
+      <if test="errinfo != null" >
+        ERRINFO,
+      </if>
+      <if test="visitedtime != null" >
+        VISITEDTIME,
+      </if>
+      <if test="responseText != null" >
+        RESPONSE_TEXT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=DECIMAL},
+      <if test="visitedip != null" >
+        #{visitedip,jdbcType=VARCHAR},
+      </if>
+      <if test="visitedurl != null" >
+        #{visitedurl,jdbcType=VARCHAR},
+      </if>
+      <if test="paramters != null" >
+        #{paramters,jdbcType=VARCHAR},
+      </if>
+      <if test="responseparams != null" >
+        #{responseparams,jdbcType=VARCHAR},
+      </if>
+      <if test="visitedhost != null" >
+        #{visitedhost,jdbcType=VARCHAR},
+      </if>
+      <if test="visiteduser != null" >
+        #{visiteduser,jdbcType=VARCHAR},
+      </if>
+      <if test="errinfo != null" >
+        #{errinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="visitedtime != null" >
+        #{visitedtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="responseText != null" >
+        #{responseText,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dc.city.common.log.domain.Citylogger" >
+    update CITYLOGGER
+    <set >
+      <if test="visitedip != null" >
+        VISITEDIP = #{visitedip,jdbcType=VARCHAR},
+      </if>
+      <if test="visitedurl != null" >
+        VISITEDURL = #{visitedurl,jdbcType=VARCHAR},
+      </if>
+      <if test="paramters != null" >
+        PARAMTERS = #{paramters,jdbcType=VARCHAR},
+      </if>
+      <if test="responseparams != null" >
+        RESPONSEPARAMS = #{responseparams,jdbcType=VARCHAR},
+      </if>
+      <if test="visitedhost != null" >
+        VISITEDHOST = #{visitedhost,jdbcType=VARCHAR},
+      </if>
+      <if test="visiteduser != null" >
+        VISITEDUSER = #{visiteduser,jdbcType=VARCHAR},
+      </if>
+      <if test="errinfo != null" >
+        ERRINFO = #{errinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="visitedtime != null" >
+        VISITEDTIME = #{visitedtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="responseText != null" >
+        RESPONSE_TEXT = #{responseText,jdbcType=CLOB},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.dc.city.common.log.domain.Citylogger" >
+    update CITYLOGGER
+    set VISITEDIP = #{visitedip,jdbcType=VARCHAR},
+      VISITEDURL = #{visitedurl,jdbcType=VARCHAR},
+      PARAMTERS = #{paramters,jdbcType=VARCHAR},
+      RESPONSEPARAMS = #{responseparams,jdbcType=VARCHAR},
+      VISITEDHOST = #{visitedhost,jdbcType=VARCHAR},
+      VISITEDUSER = #{visiteduser,jdbcType=VARCHAR},
+      ERRINFO = #{errinfo,jdbcType=VARCHAR},
+      VISITEDTIME = #{visitedtime,jdbcType=TIMESTAMP},
+      RESPONSE_TEXT = #{responseText,jdbcType=CLOB}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dc.city.common.log.domain.Citylogger" >
+    update CITYLOGGER
+    set VISITEDIP = #{visitedip,jdbcType=VARCHAR},
+      VISITEDURL = #{visitedurl,jdbcType=VARCHAR},
+      PARAMTERS = #{paramters,jdbcType=VARCHAR},
+      RESPONSEPARAMS = #{responseparams,jdbcType=VARCHAR},
+      VISITEDHOST = #{visitedhost,jdbcType=VARCHAR},
+      VISITEDUSER = #{visiteduser,jdbcType=VARCHAR},
+      ERRINFO = #{errinfo,jdbcType=VARCHAR},
+      VISITEDTIME = #{visitedtime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

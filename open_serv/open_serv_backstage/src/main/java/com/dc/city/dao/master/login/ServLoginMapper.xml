@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.login.ServLoginMapper">
+	<!-- 根据用户名称获取用户信息 -->
+	<select id="queryServeUserByUserName" resultType="ServeUser">
+		select t.ID, t.USER_NAME as USERNAME,t.nick_name nickName,t.APP_KEY as APPKEY,t.USER_CHANNEL as USERCHANNEL,t.user_pass userPass,t.user_email userEmail,
+		t.user_mobile userMobile,t.user_channel userChannel,t.user_remark userRemark,t.is_deleted isDelteted,t.encrypt_salt encryptSalt
+		,t.create_time createTime from SERVE_USER t
+		WHERE t.is_deleted=0
+		<if test="userName != null">and t.USER_NAME = #{userName,jdbcType=VARCHAR}</if>
+		<if test="id != null">and t.ID = #{id,jdbcType=DECIMAL}</if>
+	</select>
+	<!-- 根据用户ID更新用户的Appkey-->
+	<update id="modifyUserKeyByUserName">
+		update SERVE_USER
+		<set >
+			<if test="appKey != null" >APP_KEY = #{appKey,jdbcType=VARCHAR},UPDATETIME=SYSTIMESTAMP</if>
+
+		</set>
+		where USER_NAME = #{userName,jdbcType=VARCHAR}
+	</update>
+
+	<!--  根据用户的id获取用户的所有可以访问的服务 -->
+	<select id="queryUserServByUserName" resultType="DatasetServ">SELECT *
+		FROM ( SELECT  ID,
+		PARENT_ID      PARENTID,
+		SERVICE_NAME   "NAME",
+		REQUEST_METHOD METHODS,
+		PUBLISH_REMARK REMARK,
+		CONFIG_REMARK  "description",
+		SERVICE_CODE   SERVCODE,
+		CASE
+		WHEN service_type=1 THEN
+		'/serve_handle/process/v1/'||ltrim(rtrim(SERVICE_CODE))
+		ELSE ltrim(rtrim(SERVICE_CODE)) END  "url",
+		VERIFY_ACCESS  STATE,
+		CASE   WHEN SERVID IS NOT NULL THEN 1
+		WHEN SERVID IS NULL
+		AND VERIFY_VIEW = 0
+		THEN 1
+		WHEN SERVID IS NULL
+		AND VERIFY_VIEW  IS NULL THEN 1
+		ELSE 0 END isVIEW,
+		SERVICE_TYPE   SERVTYPE,
+		CASE WHEN SERVICE_TYPE=3 THEN 'GIS服务'
+		WHEN service_type=1 THEN '配置服务'
+		ELSE  '外部服务' END servTypeName,
+		UPDATETIME,
+		SERVID
+		FROM (SELECT *
+		FROM (SELECT DISTINCT ID,
+		PARENT_ID ,
+		SERVICE_NAME ,
+		REQUEST_METHOD ,
+		PUBLISH_REMARK ,
+		CONFIG_REMARK,
+		SERVICE_CODE ,
+		VERIFY_ACCESS,
+		VERIFY_VIEW,
+		SERVICE_TYPE ,
+		TO_CHAR(PUBLISH_TIME,
+		'yyyy-MM-dd hh24:mi:ss') UPDATETIME
+		FROM SERVE_CONFIG
+		WHERE IS_SERVICE = 1
+		AND SERVICE_STATUS = 3
+		AND IS_DELETED = 0
+		ORDER BY ID) SERV
+		LEFT JOIN (SELECT DISTINCT ID SERVID
+		FROM SERVE_CONFIG
+		WHERE IS_SERVICE = 1
+		AND IS_DELETED = 0
+		START WITH ID IN
+		(SELECT USERAUTH.SERVICE_ID SERVID
+		FROM SERVE_USER_AUTHORITY USERAUTH
+		LEFT JOIN SERVE_USER USR
+		ON USERAUTH.USER_ID =
+		USR.ID
+		WHERE USR.USER_NAME =#{userName}  AND USERAUTH.VIEW_PERMISSION=1
+		AND USR.IS_DELETED = 0)
+		CONNECT BY PARENT_ID = PRIOR ID
+		ORDER SIBLINGS BY ID) USRAUTH
+		ON USRAUTH.SERVID = SERV.ID)
+		)
+		WHERE
+		isVIEW=1  ORDER BY UPDATETIME desc </select>
+
+</mapper>

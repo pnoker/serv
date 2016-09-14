@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.common.log.mapper.RealRegionMapper">
+
+    <!-- 获取区域字符串 -->
+    <select
+        id="queryRegions"
+        resultType="string">
+        select wm_concat(region.region_name) as region_name from region where
+        region.region_parent_id != 0
+    </select>
+
+
+</mapper>

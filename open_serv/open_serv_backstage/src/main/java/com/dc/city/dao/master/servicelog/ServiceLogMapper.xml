@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.servicelog.ServiceLogMapper">
+
+ <select id="findAccessLogsByPageSize" resultType="ServeVisitLog">
+ select ID, USER_ID as userId,USER_NAME as userName,
+        USER_CHANNEL as
+        userChannel,SERVICE_ID as serviceId, SERVICE_TYPE as serviceType,
+        SERVICE_NAME as
+        serviceName,LOG_PARAMS as logParams,RET_CODE as retCode,
+                RET_MSG as retMsg,COST_TIME as costTime,VISIT_IPADDRESS as visitIpAddress,
+                START_TIME as startTime,END_TIME as endTime,
+                VISIT_DATE as visitDate,
+                UPDATETIME as updateTime 
+        from( 
+SELECT
+    COUNT (*) ID,
+    0 USER_ID,
+    '' USER_NAME,
+    0  USER_CHANNEL,
+    0 SERVICE_ID,
+    0 SERVICE_TYPE,
+    '' SERVICE_NAME,
+    '' LOG_PARAMS,
+    '' RET_CODE,
+    '' RET_MSG,
+  0 COST_TIME,
+    '' VISIT_IPADDRESS,
+    SYSDATE START_TIME,
+    SYSDATE END_TIME,
+    SYSDATE VISIT_DATE, 
+    SYSDATE UPDATETIME
+  from  SERVE_VISIT_LOG
+  where 0=0
+        <if test="id !=null and id >0">
+            and ID = #{id}
+        </if>
+        <if test="userName != null and userName!=''">
+            <bind name="userName_pattern" value="userName + '%'" />
+            AND USER_NAME like #{userName_pattern}
+        </if>      
+        <if test="userChannel > 0 ">
+            and USER_CHANNEL = #{userChannel}
+        </if>
+             <if test="servName != null and servName !=''">
+            <bind name="serviceName_pattern" value="servName + '%'" />
+            AND SERVICE_NAME like #{serviceName_pattern}
+        </if>  
+             <if test="ip != null and ip !=''">
+            <bind name="visitIpAddress_pattern" value="ip + '%'" />
+            AND VISIT_IPADDRESS like #{visitIpAddress_pattern}
+        </if>
+                <if test="servType > 0 ">
+            and SERVICE_TYPE = #{servType}
+        </if>   
+        <if test="beginTime != null and beginTime !=''">
+            and to_date(to_char(VISIT_DATE,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd
+            hh24:mi:ss') >=
+            to_date(#{beginTime},'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endTime != null and endTime!=''">
+                            <![CDATA[ and  to_date(to_char(VISIT_DATE,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') <= to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss') ]]>
+        </if>
+UNION ALL
+ select ID, USER_ID as userId,USER_NAME as userName,
+        USER_CHANNEL as
+        userChannel,SERVICE_ID as serviceId, SERVICE_TYPE as serviceType,
+        SERVICE_NAME as serviceName,LOG_PARAMS as logParams,RET_CODE as retCode,
+                RET_MSG as retMsg,COST_TIME as costTime,VISIT_IPADDRESS as visitIpAddress,
+                START_TIME as startTime,END_TIME as endTime,
+                VISIT_DATE as visitDate,
+                UPDATETIME as updateTime 
+        from SERVE_VISIT_LOG log
+        where 0=0 and log.rowid in
+        (
+        select rid from
+        (
+        select rownum rn,rid from
+        (
+        select
+        rowid rid from SERVE_VISIT_LOG
+        where 0 = 0
+               <if test="id !=null and id >0">
+            and ID = #{id}
+        </if>
+        <if test="userName != null and userName!=''">
+            <bind name="userName_pattern" value="userName + '%'" />
+            AND USER_NAME like #{userName_pattern}
+        </if>      
+        <if test="userChannel > 0 ">
+            and USER_CHANNEL = #{userChannel}
+        </if>
+             <if test="servName != null and servName !=''">
+            <bind name="serviceName_pattern" value="servName + '%'" />
+            AND SERVICE_NAME like #{serviceName_pattern}
+        </if>  
+             <if test="ip != null and ip !=''">
+            <bind name="visitIpAddress_pattern" value="ip + '%'" />
+            AND VISIT_IPADDRESS like #{visitIpAddress_pattern}
+        </if>
+                <if test="servType > 0 ">
+            and SERVICE_TYPE = #{servType}
+        </if>   
+        <if test="beginTime != null and beginTime !=''">
+            and to_date(to_char(VISIT_DATE,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd
+            hh24:mi:ss') >=
+            to_date(#{beginTime},'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endTime != null and endTime!=''">
+                            <![CDATA[ and  to_date(to_char(VISIT_DATE,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') <= to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss') ]]>
+        </if>
+        order by UPDATETIME desc
+        ) where  <![CDATA[  rownum <= #{endRowNum} ]]>
+        ) where rn > #{beginRowNum}
+        )
+        order by UPDATETIME desc
+        )
+ 
+ </select>
+ 
+ <select id="allImplStatByDay" resultType="AccServTotalPo">
+ select statKey ,count(*) as totalNum from( select TO_DATE(TO_CHAR(visit_Date,'yyyy-MM-dd'),'yyyy-mm-dd') as statKey from SERVE_VISIT_LOG
+ where visit_Date>= to_date(#{beginDate},'yyyy-mm-dd hh24:mi:ss')
+ and 
+ <![CDATA[ visit_Date<=to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss'))]]> 
+ a group by statKey
+ </select>
+ 
+ <select id="allImplStatByField" resultType="AccServTotalPo">
+ SELECT
+    statKey,
+    COUNT (1) AS totalNum
+FROM
+    (
+        SELECT
+            ${key} AS statKey
+        FROM
+            SERVE_VISIT_LOG
+        WHERE
+            visit_Date >= to_date('${beginDate}','yyyy-mm-dd hh24:mi:ss')
+and<![CDATA[ visit_Date<=to_date('${endDate}','yyyy-mm-dd hh24:mi:ss')]]>
+            ) A
+GROUP BY
+    statKey
+ </select>
+ 
+ <select id="dayStatByUser" resultType="AccServTotalPo">
+ SELECT
+    statKey,
+    COUNT (1) AS totalNum
+FROM
+    (
+        SELECT
+            TO_DATE(TO_CHAR(visit_Date, 'yyyy-MM-dd'),'yyyy-MM-dd') AS statKey
+        FROM
+            SERVE_VISIT_LOG
+ where visit_Date>=to_date(#{beginDate},'yyyy-mm-dd hh24:mi:ss')
+        AND <![CDATA[ visit_Date <=to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss')]]>
+ and user_Name=#{username}
+    ) A
+GROUP BY
+    statKey 
+ 
+ </select>
+ 
+ <select id="ServNameStatByUser" resultType="AccServTotalPo">
+ SELECT
+    statKey,
+    COUNT (1) AS totalNum
+FROM
+    (
+        SELECT
+            service_Name AS statKey
+        FROM
+            serve_visit_log
+     where visit_Date>=to_date(#{beginDate},'yyyy-mm-dd hh24:mi:ss')
+        AND <![CDATA[visit_Date <=to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss')]]>
+        AND user_Name =#{username}
+ ) a group by statKey 
+ </select>
+ 
+ <select id="dayStatByImpl" resultType="AccServTotalPo">
+ SELECT
+    statKey,
+    COUNT (1) AS totalNum
+FROM
+    (
+        SELECT
+            TO_DATE(TO_CHAR(visit_Date, 'yyyy-MM-dd'),'yyyy-MM-dd') AS statKey
+        FROM
+            serve_visit_log
+        WHERE
+        visit_Date>=to_date(#{beginDate},'yyyy-mm-dd hh24:mi:ss')
+        AND <![CDATA[visit_Date <=to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss')]]>
+            AND service_Id = #{serviceId}
+            ) A
+        GROUP BY
+            statKey
+   </select> 
+   
+   <select id="serviceStatByImpl" resultType="AccServTotalPo">
+   SELECT
+    statKey,
+    COUNT (1) AS totalNum
+FROM
+    (
+        SELECT
+            user_Name AS statKey
+        FROM
+            serve_visit_log
+        WHERE
+        visit_Date>=to_date(#{beginDate},'yyyy-mm-dd hh24:mi:ss')
+        AND <![CDATA[visit_Date <=to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss')]]>
+            AND service_Id = #{serviceId}
+) a group by statKey
+   </select>
+   
+   
+   <select id="ipStatByImpl" resultType="AccServTotalPo">
+   SELECT
+    statKey,
+    COUNT (1) AS totalNum
+FROM
+    (
+        SELECT
+            visit_IpAddress AS statKey
+        FROM
+            serve_visit_log
+        WHERE
+        visit_Date>=to_date(#{beginDate},'yyyy-mm-dd hh24:mi:ss')
+        AND <![CDATA[visit_Date <=to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss')]]>
+            AND service_Id = #{serviceId}
+ ) a group by statKey  
+   </select>
+   
+   <insert id="createAccessLog" parameterType="com.dc.city.domain.log.ServeVisitLog">
+  insert into serve_visit_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="userId >0">
+                USER_ID,
+            </if>
+            <if test="userName != null">
+                USER_NAME,
+            </if>
+            <if test="userChannel>0">
+                USER_CHANNEL,
+            </if>
+            <if test="serviceId > 0">
+                SERVICE_ID,
+            </if>
+            <if test="serviceType >0">
+                SERVICE_TYPE,
+            </if>
+            <if test="serviceName != null">
+                SERVICE_NAME,
+            </if>
+            <if test="logParams != null">
+                LOG_PARAMS,
+            </if>
+            <if test="retCode != null">
+                RET_CODE,
+            </if>
+            <if test="retMsg != null">
+                RET_MSG,
+            </if>
+            <if test="costTime >0">
+                COST_TIME,
+            </if>
+            <if test="visitIpAddress != null">
+                VISIT_IPADDRESS,
+            </if>
+             <if test="startTime != null">
+                START_TIME,
+            </if>
+            <if test="endTime != null">
+                END_TIME,
+            </if>
+            <if test="updateTime != null">
+                UPDATETIME,
+            </if>
+            <if test="visitDate != null">
+                VISIT_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="userId >0">
+                #{userId,jdbcType=DECIMAL},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userChannel >0">
+                #{userChannel,jdbcType=DECIMAL},
+            </if>
+            <if test="serviceId >0">
+                #{serviceId,jdbcType=DECIMAL},
+            </if>
+            <if test="serviceType >0">
+                #{serviceType,jdbcType=DECIMAL},
+            </if>
+            <if test="serviceName != null">
+                #{serviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="logParams != null">
+                #{logParams,jdbcType=VARCHAR},
+            </if>
+            <if test="retCode != null">
+                #{retCode,jdbcType=VARCHAR},
+            </if>
+            <if test="retMsg != null">
+                #{retMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="costTime>0">
+                #{costTime,jdbcType=DECIMAL},
+            </if>
+            <if test="visitIpAddress != null">
+                #{visitIpAddress,jdbcType=VARCHAR},
+            </if>
+             <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+             <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+             <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="visitDate != null">
+                #{visitDate,jdbcType=TIMESTAMP},
+            </if>          
+        </trim>
+   </insert>
+    
+    
+    
+</mapper>

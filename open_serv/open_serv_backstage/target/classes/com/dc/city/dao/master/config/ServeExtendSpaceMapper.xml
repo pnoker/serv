@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.config.ServeExtendSpaceMapper" >
+  <resultMap id="BaseResultMap" type="com.dc.city.domain.config.ServeExtendSpace" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="URL_TEST" property="urlTest" jdbcType="VARCHAR" />
+    <result column="URL_FORMAL" property="urlFormal" jdbcType="VARCHAR" />
+    <result column="GE0_FEATURES" property="ge0Features" jdbcType="DECIMAL" />
+    <result column="MAX_LENGTH" property="maxLength" jdbcType="DECIMAL" />
+    <result column="IS_VISIBLE" property="isVisible" jdbcType="DECIMAL" />
+    <result column="LAYER_TYPE" property="layerType" jdbcType="DECIMAL" />
+    <result column="DISPLAY_SCALE_MAX" property="displayScaleMax" jdbcType="DECIMAL" />
+    <result column="DISPLAY_SCALE_MIN" property="displayScaleMin" jdbcType="DECIMAL" />
+    <result column="IS_LABEL" property="isLabel" jdbcType="DECIMAL" />
+    <result column="GIS_SERVER" property="gisServer" jdbcType="DECIMAL" />
+    <result column="COORDINATE_SYSTEM" property="coordinateSystem" jdbcType="VARCHAR" />
+    <result column="COORDINATE_CODE" property="coordinateCode" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, URL_TEST, URL_FORMAL, GE0_FEATURES, MAX_LENGTH, IS_VISIBLE, LAYER_TYPE, DISPLAY_SCALE_MAX, 
+    DISPLAY_SCALE_MIN, IS_LABEL, GIS_SERVER, COORDINATE_SYSTEM, COORDINATE_CODE, UPDATETIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long" >
+    select 
+    <include refid="Base_Column_List" />
+    from SERVE_EXTEND_SPACE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="long" >
+    delete from SERVE_EXTEND_SPACE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.dc.city.domain.config.ServeExtendSpace" >
+    insert into SERVE_EXTEND_SPACE (ID, URL_TEST, URL_FORMAL, 
+      GE0_FEATURES, MAX_LENGTH, IS_VISIBLE, 
+      LAYER_TYPE, DISPLAY_SCALE_MAX, DISPLAY_SCALE_MIN, 
+      IS_LABEL, GIS_SERVER, COORDINATE_SYSTEM, 
+      COORDINATE_CODE, UPDATETIME)
+    values (#{id,jdbcType=DECIMAL}, #{urlTest,jdbcType=VARCHAR}, #{urlFormal,jdbcType=VARCHAR}, 
+      #{ge0Features,jdbcType=DECIMAL}, #{maxLength,jdbcType=DECIMAL}, #{isVisible,jdbcType=DECIMAL}, 
+      #{layerType,jdbcType=DECIMAL}, #{displayScaleMax,jdbcType=DECIMAL}, #{displayScaleMin,jdbcType=DECIMAL}, 
+      #{isLabel,jdbcType=DECIMAL}, #{gisServer,jdbcType=DECIMAL}, #{coordinateSystem,jdbcType=VARCHAR}, 
+      #{coordinateCode,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dc.city.domain.config.ServeExtendSpace" >
+    insert into SERVE_EXTEND_SPACE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      ID,
+      <if test="urlTest != null" >
+        URL_TEST,
+      </if>
+      <if test="urlFormal != null" >
+        URL_FORMAL,
+      </if>
+      <if test="ge0Features != null" >
+        GE0_FEATURES,
+      </if>
+      <if test="maxLength != null" >
+        MAX_LENGTH,
+      </if>
+      <if test="isVisible != null" >
+        IS_VISIBLE,
+      </if>
+      <if test="layerType != null" >
+        LAYER_TYPE,
+      </if>
+      <if test="displayScaleMax != null" >
+        DISPLAY_SCALE_MAX,
+      </if>
+      <if test="displayScaleMin != null" >
+        DISPLAY_SCALE_MIN,
+      </if>
+      <if test="isLabel != null" >
+        IS_LABEL,
+      </if>
+      <if test="gisServer != null" >
+        GIS_SERVER,
+      </if>
+      <if test="coordinateSystem != null" >
+        COORDINATE_SYSTEM,
+      </if>
+      <if test="coordinateCode != null" >
+        COORDINATE_CODE,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=DECIMAL},
+      <if test="urlTest != null" >
+        #{urlTest,jdbcType=VARCHAR},
+      </if>
+      <if test="urlFormal != null" >
+        #{urlFormal,jdbcType=VARCHAR},
+      </if>
+      <if test="ge0Features != null" >
+        #{ge0Features,jdbcType=DECIMAL},
+      </if>
+      <if test="maxLength != null" >
+        #{maxLength,jdbcType=DECIMAL},
+      </if>
+      <if test="isVisible != null" >
+        #{isVisible,jdbcType=DECIMAL},
+      </if>
+      <if test="layerType != null" >
+        #{layerType,jdbcType=DECIMAL},
+      </if>
+      <if test="displayScaleMax != null" >
+        #{displayScaleMax,jdbcType=DECIMAL},
+      </if>
+      <if test="displayScaleMin != null" >
+        #{displayScaleMin,jdbcType=DECIMAL},
+      </if>
+      <if test="isLabel != null" >
+        #{isLabel,jdbcType=DECIMAL},
+      </if>
+      <if test="gisServer != null" >
+        #{gisServer,jdbcType=DECIMAL},
+      </if>
+      <if test="coordinateSystem != null" >
+        #{coordinateSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="coordinateCode != null" >
+        #{coordinateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dc.city.domain.config.ServeExtendSpace" >
+    update SERVE_EXTEND_SPACE
+    <set >
+      <if test="urlTest != null" >
+        URL_TEST = #{urlTest,jdbcType=VARCHAR},
+      </if>
+      <if test="urlFormal != null" >
+        URL_FORMAL = #{urlFormal,jdbcType=VARCHAR},
+      </if>
+      <if test="ge0Features != null" >
+        GE0_FEATURES = #{ge0Features,jdbcType=DECIMAL},
+      </if>
+      <if test="maxLength != null" >
+        MAX_LENGTH = #{maxLength,jdbcType=DECIMAL},
+      </if>
+      <if test="isVisible != null" >
+        IS_VISIBLE = #{isVisible,jdbcType=DECIMAL},
+      </if>
+      <if test="layerType != null" >
+        LAYER_TYPE = #{layerType,jdbcType=DECIMAL},
+      </if>
+      <if test="displayScaleMax != null" >
+        DISPLAY_SCALE_MAX = #{displayScaleMax,jdbcType=DECIMAL},
+      </if>
+      <if test="displayScaleMin != null" >
+        DISPLAY_SCALE_MIN = #{displayScaleMin,jdbcType=DECIMAL},
+      </if>
+      <if test="isLabel != null" >
+        IS_LABEL = #{isLabel,jdbcType=DECIMAL},
+      </if>
+      <if test="gisServer != null" >
+        GIS_SERVER = #{gisServer,jdbcType=DECIMAL},
+      </if>
+      <if test="coordinateSystem != null" >
+        COORDINATE_SYSTEM = #{coordinateSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="coordinateCode != null" >
+        COORDINATE_CODE = #{coordinateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dc.city.domain.config.ServeExtendSpace" >
+    update SERVE_EXTEND_SPACE
+    set URL_TEST = #{urlTest,jdbcType=VARCHAR},
+      URL_FORMAL = #{urlFormal,jdbcType=VARCHAR},
+      GE0_FEATURES = #{ge0Features,jdbcType=DECIMAL},
+      MAX_LENGTH = #{maxLength,jdbcType=DECIMAL},
+      IS_VISIBLE = #{isVisible,jdbcType=DECIMAL},
+      LAYER_TYPE = #{layerType,jdbcType=DECIMAL},
+      DISPLAY_SCALE_MAX = #{displayScaleMax,jdbcType=DECIMAL},
+      DISPLAY_SCALE_MIN = #{displayScaleMin,jdbcType=DECIMAL},
+      IS_LABEL = #{isLabel,jdbcType=DECIMAL},
+      GIS_SERVER = #{gisServer,jdbcType=DECIMAL},
+      COORDINATE_SYSTEM = #{coordinateSystem,jdbcType=VARCHAR},
+      COORDINATE_CODE = #{coordinateCode,jdbcType=VARCHAR},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

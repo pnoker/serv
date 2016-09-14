@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.securitymanage.blacklist.BlackListManageMapper" >
+  <resultMap id="BaseResultMap" type="com.dc.city.domain.securitymanage.blacklist.ServeBlackList" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="IP_ADDRESS" property="ipAddress" jdbcType="VARCHAR" />
+    <result column="BAN_REASON" property="banReason" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, IP_ADDRESS, BAN_REASON, UPDATETIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long" >
+    select 
+    <include refid="Base_Column_List" />
+    from SERVE_BLACK_LIST
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="long" >
+    delete from SERVE_BLACK_LIST
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.dc.city.domain.securitymanage.blacklist.ServeBlackList" >
+    insert into SERVE_BLACK_LIST (ID, IP_ADDRESS, BAN_REASON, 
+      UPDATETIME)
+    values (#{id,jdbcType=DECIMAL}, #{ipAddress,jdbcType=VARCHAR}, #{banReason,jdbcType=VARCHAR}, 
+      #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dc.city.domain.securitymanage.blacklist.ServeBlackList" >
+    insert into SERVE_BLACK_LIST
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="ipAddress != null" >
+        IP_ADDRESS,
+      </if>
+      <if test="banReason != null" >
+        BAN_REASON,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="ipAddress != null" >
+        #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="banReason != null" >
+        #{banReason,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dc.city.domain.securitymanage.blacklist.ServeBlackList" >
+    update SERVE_BLACK_LIST
+    <set >
+      <if test="ipAddress != null" >
+        IP_ADDRESS = #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="banReason != null" >
+        BAN_REASON = #{banReason,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dc.city.domain.securitymanage.blacklist.ServeBlackList" >
+    update SERVE_BLACK_LIST
+    set IP_ADDRESS = #{ipAddress,jdbcType=VARCHAR},
+      BAN_REASON = #{banReason,jdbcType=VARCHAR},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+  
+    <!-- 查询黑名单 -->
+  <select id="getTotalCount"   resultType="java.lang.Integer">  
+       SELECT count(1) FROM SERVE_BLACK_LIST 
+            <where> 
+                 <if test="ipAddress != null">
+                    <bind name="ipAddress_pattern" value="'%' + ipAddress + '%'" />
+                        IP_ADDRESS like  #{ipAddress_pattern}
+                 </if>
+                 <if test="beginDate != null">
+                    and  to_date(to_char(UPDATETIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') >= to_date(#{beginDate},'yyyy-mm-dd hh24:mi:ss')
+                 </if>
+                 <if test="endDate != null">
+                    <![CDATA[ and  to_date(to_char(UPDATETIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') <= to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss') ]]> 
+                 </if>
+            </where>
+   </select>
+  
+  <!-- 查询黑名单 -->
+  <select id="queryBlackList"   resultType="blackListManagePo">  
+       SELECT ID,IP_ADDRESS as IPADDRESS,BAN_REASON as BANREASON,to_char(UPDATETIME,'yyyy-mm-dd hh24:mi:ss') as UPDATETIME
+       FROM SERVE_BLACK_LIST esr
+       where esr.rowid in 
+       (
+          select rid from 
+          (
+              select rownum rn,rid from 
+              (
+                    select rowid rid from SERVE_BLACK_LIST 
+                    <where> 
+                         <if test="ipAddress != null">
+                            <bind name="ipAddress_pattern" value="'%' + ipAddress + '%'" />
+                                IP_ADDRESS like  #{ipAddress_pattern}
+                         </if>
+                         <if test="beginDate != null">
+                            and  to_date(to_char(UPDATETIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') >= to_date(#{beginDate},'yyyy-mm-dd hh24:mi:ss')
+                         </if>
+                         <if test="endDate != null">
+                            <![CDATA[ and  to_date(to_char(UPDATETIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') <= to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss') ]]> 
+                         </if>
+                    </where>
+              ) where  <![CDATA[  rownum < #{endRowNum} ]]>
+           ) where rn >= #{beginRowNum}      
+       )
+       order by esr.UPDATETIME desc
+   </select>
+   
+   <!-- 查询黑名单 -->
+   <select id="queryBlackListAll"   resultType="blackListManagePo">  
+       SELECT ID,IP_ADDRESS as IPADDRESS FROM SERVE_BLACK_LIST 
+    </select>
+   
+  
+   <!-- 添加黑名单 -->
+   <insert
+        id="createBlackList"
+        parameterType="blackListManagePo"  useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+        insert into SERVE_BLACK_LIST (IP_ADDRESS, BAN_REASON)
+        values ( #{ipAddress,jdbcType=VARCHAR}, #{banReason,jdbcType=VARCHAR} )
+  </insert>
+
+  
+  
+   <!-- 删除黑名单 -->   
+   <delete id="removeBlackList">
+        delete from SERVE_BLACK_LIST  where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
+            #{item}   
+        </foreach>  
+   </delete> 
+  
+  
+  
+ 
+  
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.login.ServLoginLogMapper">
+	<!-- createServLoginLog -->
+	<insert id="createServLoginLog" parameterType="ServLoginLog">MERGE INTO SERVE_LOGIN_LOG p
+		USING
+		(
+		select
+		#{userName,jdbcType=VARCHAR} as userName,
+		#{tokeId,jdbcType=VARCHAR} tokeId,
+		#{ip,jdbcType=VARCHAR} ip,
+		#{remark,jdbcType=VARCHAR} remark,
+		#{isSucc,jdbcType=DECIMAL} isSucc,
+		#{loginTime,jdbcType=TIMESTAMP} loginTime
+		from  dual
+		)  np
+		ON (P.TOKEN_ID = NP.tokeId)
+		WHEN MATCHED THEN
+		UPDATE SET P.USER_NAME = NP.userName,P.IP = NP.ip,
+		P.REMARK = NP.REMARK,P.IS_SUCC = NP.isSucc,
+		P.login_Time = NP.loginTime,
+		p.update_time=SYSTIMESTAMP
+		WHEN NOT MATCHED THEN
+		INSERT(USER_NAME,
+		TOKEN_ID,IP,REMARK,IS_SUCC,login_Time) VALUES (NP.userName, NP.tokeId,NP.ip, NP.remark,NP.isSucc,NP.loginTime)</insert>
+
+	<!-- 根据tokenId获取服务日志 -->
+	<select id="queryServLoginLog" resultType="ServLoginLog">SELECT t.user_name userName,t.token_id tokenId,t.ip,t.is_succ isSucc,t.login_time loginTime,t.remark FROM serve_login_log t WHERE t.token_id= #{tokenId}</select>
+
+	<!-- 获取用户最近登录的时间-->
+	<select id="queryNewlySecServLoginLog" resultType="ServLoginLog">
+		SELECT * FROM
+		( SELECT t.user_name userName,t.token_id tokenId,t.ip,t.is_succ isSucc,t.login_time loginTime,t.remark
+		FROM serve_login_log t
+		WHERE t.user_name= #{userName}
+		ORDER BY t.login_time DESC)
+		<![CDATA[  WHERE Rownum<=2
+		]]>
+	</select>
+
+</mapper>

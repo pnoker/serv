@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body style="line-height:100px">
+数  据  源: <select id="datasource" style="width:500px">
+            <option>数据源</option>   
+        </select>
+        <br/>
+服务目录：<select id="config" style="width:500px">
+            <option>服务目录</option>   
+        </select>
+服务代码：<input id="servCode" style="width:500px"/>
+<br/>
+服务名称：<input id="servName" style="width:500px"/>
+
+请求方式：<label><input name="requestMethod" type="radio" value="post"  checked="checked"/>POST </label> 
+            <label><input name="requestMethod" type="radio" value="get" />GET </label> 
+            <br/>
+描   述：<textarea rows="4" cols="155"></textarea>
+
+<label style="width:100%;text-align:center">辅助配置</label>
+
+请求参数配置：
+<div class="portlet-body">
+
+        <div ><button class="btn-green add-row-btn">添加参数</button></div>
+    
+        <table id="example3" class="table table-striped table-hover table-bordered my-table" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>字段</th>
+                <th>字段描述</th>
+                <th>参数名称</th>
+                <th>必填</th>
+                <th>运算规则</th>
+                <th>参数描述</th>
+            </tr>
+            </thead>
+        </table>
+    
+    </div>
+    <script src="pages/dataGrab/js/table_editable.js"></script>
+</body>
+</html>

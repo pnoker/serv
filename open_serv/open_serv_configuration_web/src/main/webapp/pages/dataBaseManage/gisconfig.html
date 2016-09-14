@@ -1,0 +1,194 @@
+
+<div class="header-panel">
+    <span id="titleDiv" style="float: left">新增GIS服务</span><a id="returnClick" href="javascript:;" style="float: right">返回></a>
+</div>
+<script type="text/javascript">
+	$("#returnClick").on("click",function(){
+	   var url = "./pages/serviceManage/gis/list.html";
+	   $("#digitalChinaCurrentUrl").val(url);
+	    $("#tab-content-body").load(url);
+	});
+</script>
+<div class="container-fluid container-full">
+    <form class="form-horizontal" id="dismissEventForm">   
+        <div class="row-fluid form-group first-form-group">
+           <div class="row">
+                <label class="col-sm-2 control-label"><span class="required">*</span>选择服务目录:</label>
+                <div class="col-sm-8">
+                    <select id="serverMenu" class="form-control input-sm">
+                        <option value="1">目录1</option>
+                        <option value="2">目录2</option>
+                        <option value="3">目录3</option>
+                    </select>
+                </div>
+           </div>
+            <div class="row">
+              <label class="col-sm-2 control-label"><span class="required">*</span>服务名称:</label>
+               <div class="col-sm-8">
+                    <input id="serviceName" class="form-control input-sm validate[required]"/>
+              </div>
+            </div>
+	       <div class="row">
+              <label class="col-sm-2 control-label"><span class="required">*</span>描     述:</label>
+               <div class="col-sm-8">
+                    <textarea id="configRemark" class="form-control validate[required]" rows="3" style="resize: none;"></textarea>
+              </div>
+            </div>
+             <div class="row">
+              <label class="col-sm-2 control-label"><span class="required">*</span>测试服务地址:</label>
+               <div class="col-sm-8">
+                    <input id="urlTest" class="form-control input-sm validate[required]"/>
+              </div>
+            </div> 
+             <div class="row">
+              <label class="col-sm-2 control-label"><span class="required">*</span>正式服务地址:</label>
+               <div class="col-sm-8">
+                    <input id="urlFormal" class="form-control input-sm validate[required]"/>
+              </div>
+            </div>
+            <div class="row">
+               <label class="col-sm-2 control-label"><span class="required">*</span>几何特征:</label> 
+               <div class="col-sm-8">
+                  <label class="radio-inline">
+                      <input type="radio" name="geoFeature" class="validate[required]" id="featureTypePoint" value="1"> 点
+                  </label>
+                  <label class="radio-inline">
+                      <input type="radio" name="geoFeature" class="validate[required]"  id="featureTypeLine" value="2"> 线
+                  </label>
+                  <label class="radio-inline">
+                      <input type="radio" name="geoFeature" class="validate[required]"  id="featureTypePolygon" value="3">面
+                  </label>
+                  <label class="radio-inline">
+                      <input type="radio" name="geoFeature" class="validate[required]"  id="featureTypeNULL" value="4">NULL
+                  </label>
+                </div> 
+            </div>
+            <div class="row">
+              <label class="col-sm-2 control-label"><span class="required"></span>最大记录数：</label>
+               <div class="col-sm-2">
+                    <input id="maxLength" class="form-control input-sm validate[required,custom[onlyNumberSp]]"/>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 control-label"><span class="required"></span>图层可见性：</label>
+               <div class="col-sm-6">
+                     <label class="radio-inline"> <input type="radio" class="validate[required]"  name="isVisible" id="unVisible" value="0"> 不可见
+                    </label> <label class="radio-inline"> <input type="radio" class="validate[required]"  name="isVisible" id="visible" checked="checked" value="1"> 可见
+                    </label>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 control-label"><span class="required"></span>图层类型：</label>
+               <div class="col-sm-6">
+                     <label class="radio-inline"> <input class="validate[required]"  type="radio" name="layerType" id="featureLayer" checked="checked" value="1"> Feature Layer
+                    </label> <label class="radio-inline"> <input class="validate[required]"  type="radio" name="layerType" id="rasterLayer" value="2"> Raster Layer
+                    </label>
+              </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 control-label"><span class="required"></span>支持格式：</label>
+                <div class="col-sm-4">
+                    <label class="checkbox-inline"> <input class="validate[required]"  type="checkbox" name="resultFormat" id="resultJSON" value="json"> JSON
+                    </label> <label class="checkbox-inline"> <input class="validate[required]"  type="checkbox" name="resultFormat" id="resultAMF" value="amf"> AMF
+                    </label>
+                </div>
+             </div>
+             <div class="row">
+                <label class="col-sm-2 control-label"><span class="required"></span>最大显示比例：</label>
+                <div class="col-sm-1">
+                     <input id="displayScaleMax" class="form-control input-sm validate[required,custom[onlyNumberSp]]"/>
+                </div>
+                <label class="col-sm-2 control-label"><span class="required"></span>最小显示比例：</label>
+                <div class="col-sm-1">
+                     <input id="displayScaleMin" class="form-control input-sm validate[required,custom[onlyNumberSp]]"/>
+                </div>
+             </div>
+            <div class="row">
+              <label class="col-sm-2 control-label"><span class="required"></span>是否有标注：</label>
+               <div class="col-sm-6">
+                     <label class="radio-inline"> <input class="validate[required]"   type="radio" name="isLabel" id="haveLabel" value="1"> 是
+                    </label> <label class="radio-inline"> <input class="validate[required]"   type="radio" name="isLabel" id="noLabel" checked="checked" value="0"> 否
+                    </label>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 control-label"><span class="required"></span>ArcGIS_Server：</label>
+               <div class="col-sm-8">
+                     <label class="radio-inline"> <input type="radio" name="gisServer" class="validate[required]"  id="arcgisServer1" value="1" checked="checked"> Map Server + KML                   </label> 
+                     <label class="radio-inline"> <input type="radio" name="gisServer" class="validate[required]"  id="arcgisServer2" value="2"> Map Server + KML + WMS             </label>
+                     <label class="radio-inline"> <input type="radio" name="gisServer" class="validate[required]"  id="arcgisServer3" value="3"> Map Server + KML + Feature Access  </label>
+                     <label class="radio-inline"> <input type="radio" name="gisServer" class="validate[required]"  id="arcgisServer4" value="4"> Map Server + KML + WCS             </label>
+                     <label class="radio-inline"> <input type="radio" name="gisServer" class="validate[required]"  id="arcgisServer5" value="5"> Map Server + KML + WFS             </label>
+                     <label class="radio-inline"> <input type="radio" name="gisServer" class="validate[required]"  id="arcgisServer6" value="6"> Map Server + KML + Schematics      </label>
+                     <label class="radio-inline"> <input type="radio" name="gisServer" class="validate[required]"  id="arcgisServer7" value="7"> Map Server + KML + Mobile Data Access  </label>
+                     <label class="radio-inline"> <input type="radio" name="gisServer" class="validate[required]"  id="arcgisServer8" value="8"> Map Server + KML + Network Analysis  </label>
+              </div>
+            </div>
+             <div class="row">
+                <label class="col-sm-2 control-label"><span class="required"></span>坐标系统：</label>
+                <div class="col-sm-2">
+                     <input id="coordinateSystem" class="form-control input-sm validate[required]"/>
+                </div>
+              </div>  
+              <div class="row">
+                <label class="col-sm-2 control-label"><span class="required"></span>坐标代码：</label>
+                <div class="col-sm-1">
+                     <input id="coordinateCode" class="form-control input-sm validate[required,custom[onlyNumberSp]]"/>
+                </div>
+             </div>      
+             
+             <div class="row">
+                <label class="col-sm-2 control-label">数据字典：</label>
+                <div class="col-sm-10">
+                    <!--<div ><button class="btn-green add-row-btn">新建</button></div>-->
+                    <div>
+                        <button class="add-row-btn" type="button" id="addGisConfigBtn">
+                            <span>+</span>新建
+                        </button>
+                    </div>
+                    <table id="gis-config-data-dictionary" class="table table-striped table-hover table-bordered my-table" cellspacing="0" style="width: 100% !important;">
+                        <thead>
+                            <tr>
+                                <th>字段名称</th>
+                                <th>字段类型</th>
+                                <th>字段长度</th>
+                                <th>小数位数</th>
+                                <th>为空</th>
+                                <th>字段说明</th>
+                                <th>备注</th>
+                                <th class="delete-row">删除</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div id="gis_update_log_row" class="row" >
+                <label class="col-sm-2 control-label">更新日志：</label>
+                <div class="col-sm-10">
+                    <textarea style="width: 100%;" class="validate[required]" rows="5" id="editRemark" name="editRemark" placeholder="请填写本次更新内容"></textarea>
+                </div>
+            </div>             
+            <div class="row btn-medium-blue-container">
+                <button id="gisSaveBtn" class="btn-medium-blue" type="button">保&nbsp;&nbsp;&nbsp;存</button>
+            </div> 
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+//修改页面需要的参数标记
+var hasGisConfigId = getQueryString("configId");
+if(hasGisConfigId){
+    $("#titleDiv").text("修改GIS服务");
+}else{
+    $("#titleDiv").text("新增GIS服务");
+}
+//点击服务名称和描述跳转页面时需要的参数标记
+var readOnly = getQueryString("readOnly");
+if(readOnly){
+    $("#gisSaveBtn").css("display","none"); 
+    $("#titleDiv").text("GIS服务");
+}
+//测试用
+//hasGisConfigId = 77;
+</script>
+<script src="pages/dataBaseManage/js/gis.js"></script>

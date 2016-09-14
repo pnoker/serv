@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.dataset.DatasetMapper">
+	<!-- 根据用户名称获取用户信息 -->
+	<select id="queryNoVerifyDatasetMenus" resultType="DatasetMenu">SELECT DISTINCT ID,
+		PARENT_ID    parentId,
+		SERVICE_NAME  "NAME",
+		TREE_LEVEL    "LEVEL"
+		FROM SERVE_CONFIG
+		WHERE IS_SERVICE = 0
+		AND TREE_LEVEL &lt;= 3
+		AND IS_DELETED = 0
+		START WITH ID IN ( SELECT ID FROM( SELECT * FROM SERVE_CONFIG  WHERE VERIFY_VIEW = 0 OR VERIFY_VIEW IS NULL )
+		WHERE  IS_SERVICE = 1
+		AND SERVICE_STATUS=3
+		AND IS_DELETED = 0
+		)
+		CONNECT BY PRIOR PARENT_ID = ID
+		ORDER SIBLINGS BY ID</select>
+
+	<!-- 获取需要经过权限验证的菜单，用于用户登录之后使用 -->
+	<select id="queryVerifyDatasetMenus" resultType="DatasetMenu">
+		SELECT DISTINCT ID,
+		PARENT_ID    parentId,
+		SERVICE_NAME  "NAME",
+		TREE_LEVEL    "LEVEL"
+		FROM SERVE_CONFIG
+		WHERE IS_SERVICE = 0
+		AND TREE_LEVEL &lt;= 3
+		AND IS_DELETED = 0
+		START WITH ID IN (
+		SELECT DISTINCT ID FROM(
+		<if test="ids !=null">
+			select m.id from serve_config m
+			WHERE m.service_status=3 AND m.is_deleted=0 AND m.is_service=1
+			start with m.id in
+			<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+			connect by  m.parent_id= PRIOR m.id
+			UNION
+		</if>
+		SELECT ID FROM( SELECT * FROM SERVE_CONFIG  WHERE VERIFY_VIEW = 0 OR VERIFY_VIEW IS NULL )
+		WHERE  IS_SERVICE = 1
+		AND SERVICE_STATUS=3
+		AND IS_DELETED = 0))
+		CONNECT BY PRIOR PARENT_ID = ID
+		ORDER SIBLINGS BY ID
+	</select>
+
+	<!-- 根据服务的父级ID获取当前不需要验证权限的服务 -->
+	<select id="queryNoVerifyDatasetServByPageSizeAndParentId" resultType="DatasetServ">
+		SELECT *
+		FROM (
+		SELECT servConf.*, ROWNUM rn from(SELECT DISTINCT ID,
+		PARENT_ID PARENTID,
+		SERVICE_NAME "NAME",
+		REQUEST_METHOD METHODS,
+		PUBLISH_REMARK REMARK,
+		CASE WHEN  VERIFY_VIEW=0 THEN 0
+		WHEN VERIFY_VIEW IS NULL THEN 0
+		ELSE 1 END  VERIFY_VIEW,
+		PUBLISH_REMARK "description",
+		SERVICE_CODE SERVCODE,
+		VERIFY_ACCESS STATE,
+		SERVICE_TYPE SERVTYPE,
+		TO_CHAR(PUBLISH_TIME, 'yyyy-MM-dd hh24:mi:ss') UPDATETIME
+		FROM SERVE_CONFIG 
+		WHERE IS_SERVICE = 1
+		AND SERVICE_STATUS = 3
+		AND IS_DELETED = 0
+		<if test="servName !=null">and SERVICE_NAME LIKE lower(CONCAT(CONCAT('%', #{servName}), '%')) or SERVICE_NAME like upper(CONCAT(CONCAT('%', #{servName}), '%')) AND IS_SERVICE = 1
+    AND SERVICE_STATUS = 3
+    AND IS_DELETED = 0</if>
+		<if test="parentId !=null">START WITH ID =#{parentId}
+			CONNECT BY PARENT_ID = PRIOR ID</if> ORDER  BY UPDATETIME desc 
+		) servConf	WHERE VERIFY_VIEW=0 
+
+		)
+		WHERE rn >=#{startRow}
+		AND rn &lt;= #{endRow}
+	</select>
+
+	<!-- 根据用户名称获取用户在当前下级节点下能访问的服务列表 -->
+	<select id="queryVerifyDatasetServByPageSizeAndParentIdAndUserName" resultType="DatasetServ">
+SELECT * from(SELECT serConf.* ,ROWNUM rn
+		FROM ( SELECT  ID,
+		PARENT_ID      PARENTID,
+		SERVICE_NAME   "NAME",
+		REQUEST_METHOD METHODS,
+		PUBLISH_REMARK REMARK,
+		CONFIG_REMARK  "description",
+		SERVICE_CODE   SERVCODE,
+		VERIFY_ACCESS  STATE,
+		CASE   WHEN SERVID IS NOT NULL THEN 1
+		WHEN SERVID IS NULL
+		AND VERIFY_VIEW = 0
+		THEN 1
+		WHEN SERVID IS NULL
+		AND VERIFY_VIEW  IS NULL THEN 1
+		ELSE 0 END isVIEW,
+		SERVICE_TYPE   SERVTYPE,
+		UPDATETIME,
+		SERVID
+		FROM (SELECT *
+		FROM (SELECT DISTINCT ID,
+		PARENT_ID ,
+		SERVICE_NAME ,
+		REQUEST_METHOD ,
+		PUBLISH_REMARK ,
+		CONFIG_REMARK,
+		SERVICE_CODE ,
+		VERIFY_ACCESS,
+		VERIFY_VIEW,
+		SERVICE_TYPE ,
+		TO_CHAR(PUBLISH_TIME,
+		'yyyy-MM-dd hh24:mi:ss') UPDATETIME
+		FROM SERVE_CONFIG
+		WHERE IS_SERVICE = 1
+		AND SERVICE_STATUS = 3
+		AND IS_DELETED = 0
+		<if test="servName !=null">and (SERVICE_NAME LIKE lower(CONCAT(CONCAT('%', #{servName}), '%')) or SERVICE_NAME like upper(CONCAT(CONCAT('%', #{servName}), '%'))) AND IS_SERVICE = 1
+    AND SERVICE_STATUS = 3
+    AND IS_DELETED = 0</if>
+		<if test="parentId !=null">START WITH ID =#{parentId}
+			CONNECT BY PARENT_ID = PRIOR ID</if>
+		ORDER BY ID) SERV
+		LEFT JOIN (SELECT DISTINCT ID SERVID
+		FROM SERVE_CONFIG
+		WHERE IS_SERVICE = 1
+		AND IS_DELETED = 0
+		START WITH ID IN
+		(SELECT USERAUTH.SERVICE_ID SERVID
+		FROM SERVE_USER_AUTHORITY USERAUTH
+		LEFT JOIN SERVE_USER USR
+		ON USERAUTH.USER_ID =
+		USR.ID
+		WHERE USR.USER_NAME =#{userName} AND USERAUTH.VIEW_PERMISSION=1
+		AND USR.IS_DELETED = 0)
+		CONNECT BY PARENT_ID = PRIOR ID
+		ORDER SIBLINGS BY ID) USRAUTH
+		ON USRAUTH.SERVID = SERV.ID)
+		order by UPDATETIME desc
+		    ) serConf WHERE   isVIEW=1  
+   ) WHERE  rn >=#{startRow}
+		AND rn &lt;= #{endRow}
+	</select>
+
+	<!-- 根据用户名获取服务的基本信息 -->
+	<select id="queryDatasetServBasicInfoById" resultType="DatasetServ">
+		SELECT DISTINCT son.ID,
+		son.PARENT_ID parentId,
+		par.service_name ParentName,
+		son.SERVICE_NAME "name",
+		CASE
+		WHEN son.service_type=1 THEN
+		'/serv_handle/process/v1/'||ltrim(rtrim(son.SERVICE_CODE))
+		ELSE ltrim(rtrim(son.SERVICE_CODE)) END  "url",
+		son.REQUEST_METHOD METHODS,
+		son.PUBLISH_REMARK REMARK,
+		son.CONFIG_REMARK "description",
+		son.SERVICE_CODE servCode,
+		<choose>
+			<when test="userName != null">CASE WHEN son.VERIFY_ACCESS=0 THEN 1
+				WHEN son.VERIFY_ACCESS=1 THEN
+				(
+				SELECT
+				SUM(CASE WHEN vper.ACCESS_PERMISSION=1 THEN 1
+				WHEN  vper.ACCESS_PERMISSION IS NULL THEN 0
+				ELSE 0 END) NUM
+				FROM( SELECT ID FROM  SERVE_CONFIG  START WITH ID =#{id}  CONNECT BY PRIOR PARENT_ID =ID ) servItem
+				LEFT JOIN
+				( SELECT auth.service_id,auth.ACCESS_PERMISSION
+				FROM  serve_user_authority auth LEFT JOIN serve_user seruer ON auth.user_id=seruer.id WHERE SERUER.USER_NAME=#{userName}  and IS_DELETED=0) vper
+				ON servItem.id=vper.service_id
+				) END</when>
+			<otherwise>CASE WHEN son.VERIFY_ACCESS=0 THEN 1
+				CASE WHEN son.VERIFY_ACCESS is null THEN 1
+				else 0 end</otherwise>
+		</choose>
+		state,
+		son.SERVICE_TYPE servType,
+		CASE WHEN son.SERVICE_TYPE=3 THEN 'GIS服务'
+		WHEN son.service_type=1 THEN '配置服务'
+		ELSE  '外部服务' END servTypeName,
+		TO_CHAR(son.PUBLISH_TIME, 'yyyy-MM-dd hh24:mi:ss') UPDATETIME
+		FROM SERVE_CONFIG son
+		LEFT JOIN  SERVE_CONFIG par
+		ON son.parent_id=par.id
+		WHERE son.ID =#{id}
+	</select>
+
+	<!-- 根据服务的Id获取请求参数 -->
+	<select id="queryServRequestParamsByServId" resultType="ServRequestParams">SELECT T.SERVICE_ID "ID",
+		T.PARAM_CODE PARAMNAME,
+		T.PARAM_DESC PARAMDESCRIPTION,
+		CASE
+		WHEN T.PARAM_TYPE = 0 THEN
+		'int'
+		WHEN T.PARAM_TYPE = 1 THEN
+		'string'
+		WHEN T.PARAM_TYPE = 2 THEN
+		'float'
+		WHEN T.PARAM_TYPE = 3 THEN
+		'date'
+		ELSE
+		'datetime'
+		END PARAMTYPE,
+		T.IS_REQUIRED "required",
+		TO_CHAR(T.UPDATETIME, 'yyyy-MM-dd hh24:mi:ss') UPDATETIME
+		FROM SERVE_INPUT_PARAM T
+		WHERE T.SERVICE_ID = #{servId}</select>
+
+	<!-- 根据服务Id获取服务的返回参数 -->
+	<select id="queryServResponseFieldsByServId" resultType="ServResponseField">SELECT T.SERVICE_ID "ID",
+		T.PARAM_CODE fieldName,
+		T.PARAM_DESC fieldDescription,
+		CASE
+		WHEN T.PARAM_TYPE = 0 THEN
+		'int'
+		WHEN T.PARAM_TYPE = 1 THEN
+		'string'
+		WHEN T.PARAM_TYPE = 2 THEN
+		'float'
+		WHEN T.PARAM_TYPE = 3 THEN
+		'date'
+		ELSE
+		'datetime'
+		END fieldType,
+		TO_CHAR(T.UPDATETIME, 'yyyy-MM-dd hh24:mi:ss') UPDATETIME
+		FROM serve_output_param T
+		WHERE T.SERVICE_ID =#{servId}</select>
+
+	<!-- 根据服务Id获取服务的返回参数 -->
+	<select id="queryServExampleByServId" resultType="ServExample">select t.service_id servId, t.result_example resultExample, LOWER(t.result_type) resultType  from SERVE_RESULT_EXAMPLE t
+		WHERE t.service_id=#{servId}</select>
+
+	<!-- 根据服务id获取服务的更新记录 -->
+	<select id="queryServModifyLogByServId" resultType="ServModifyLog">SELECT  t.service_id servId,t.operator_id operatorId,t.operator_name operatorName,t.modify_remark updateContent,
+		to_char(t.updatetime,'yyyy-MM-dd hh24:mi:ss') updatetime
+		from SERVE_MODIFY_LOG t WHERE t.service_id=#{servId}
+		ORDER BY t.updatetime DESC</select>
+</mapper>

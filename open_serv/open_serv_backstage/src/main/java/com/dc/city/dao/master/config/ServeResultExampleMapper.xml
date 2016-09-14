@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.config.ServeResultExampleMapper">
+    <resultMap id="BaseResultMap" type="com.dc.city.domain.config.ServeResultExample">
+         <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="SERVICE_ID" property="serviceId" jdbcType="DECIMAL"  />
+        <result column="RESULT_TYPE" property="resultType" jdbcType="VARCHAR" />
+        <result column="RESULT_EXAMPLE" property="resultExample" jdbcType="CLOB" javaType="java.lang.String" typeHandler="com.dc.city.common.datasource.support.OracleClobTypeHandler" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID, SERVICE_ID, RESULT_TYPE,RESULT_EXAMPLE 
+    </sql>
+
+    <insert id="createResultExample">
+        insert into SERVE_RESULT_EXAMPLE (SERVICE_ID,RESULT_EXAMPLE,RESULT_TYPE)
+        values(
+        #{serviceId},#{resultExample,jdbcType=CLOB},#{resultType})
+    </insert>
+
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_RESULT_EXAMPLE
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_RESULT_EXAMPLE
+    </select>
+    
+    <select id="queryByServiceId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_RESULT_EXAMPLE where service_id =#{serviceId}
+    </select>
+
+       <delete id="deleteByServiceId" parameterType="long">
+        delete from SERVE_RESULT_EXAMPLE
+        where SERVICE_ID =
+        #{serviceId,jdbcType=DECIMAL}
+    </delete>
+
+
+</mapper>

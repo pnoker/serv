@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd "
+    default-autowire="byName">
+
+    <!--初始化动态数据源，需要动态数据源的工程才需要配置 -->
+    <bean class="com.dc.city.listener.datasouce.InitDataSourceListener"></bean>
+    
+    <!-- 初始化配置表信息到redis中 -->
+    <bean class="com.dc.city.listener.config.InitConfigerListener"></bean>
+    
+    <!-- 初始化配置黑名单信息 -->
+    <bean class="com.dc.city.listener.securitymanage.BlackListInitDataListener"></bean>
+    
+</beans>

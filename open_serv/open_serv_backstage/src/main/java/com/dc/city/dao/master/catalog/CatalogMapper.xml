@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.catalog.CatalogMapper">
+    <resultMap id="BaseResultMap" type="com.dc.city.pojo.serve.catalog.CatalogPo">
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="PARENT_ID" property="pid" jdbcType="DECIMAL" />
+        <result column="SERVICE_NAME" property="catalogName" jdbcType="VARCHAR" />
+        <result column="TREE_LEVEL" property="treeLevel" jdbcType="DECIMAL" />
+        <result column="CONFIG_REMARK" property="catalogRemark" jdbcType="VARCHAR" />
+        <result column="IS_DELETED" property="isDeleted" jdbcType="DECIMAL" />    
+        <result column="SERVICE_TYPE" property="serviceType" jdbcType="DECIMAL" />
+        <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID,PARENT_ID,SERVICE_NAME,TREE_LEVEL,CONFIG_REMARK,IS_DELETED,SERVICE_TYPE
+    </sql>
+    <select id="selectAllCatalog" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_CONFIG
+    </select>
+    
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_CONFIG
+        where ID = #{id,jdbcType=DECIMAL} AND IS_SERVICE=0
+    </select>
+
+    <delete id="deleteCatalogById" parameterType="long">
+        update  SERVE_CONFIG
+        set IS_DELETED = 1
+        where ID =#{id,jdbcType=DECIMAL}
+    </delete>
+
+    <insert id="addCatalogo" parameterType="com.dc.city.pojo.serve.catalog.CatalogPo">
+        insert into SERVE_CONFIG (PARENT_ID,
+        SERVICE_NAME,TREE_LEVEL,CONFIG_REMARK,SERVICE_TYPE,IS_SERVICE,IS_DELETED,UPDATETIME
+        )
+        values
+        (#{pid,jdbcType=DECIMAL},
+        #{catalogName,jdbcType=VARCHAR},
+        #{treeLevel,jdbcType=DECIMAL},
+        #{catalogRemark,jdbcType=VARCHAR}, #{serviceType,jdbcType=DECIMAL},0,0,SYSTIMESTAMP)
+    </insert>
+
+    <update id="updateCatalogById" parameterType="com.dc.city.pojo.serve.catalog.CatalogPo">
+        update SERVE_CONFIG
+        <set>
+            <if test="pid != null">
+                PARENT_ID = #{pid,jdbcType=DECIMAL},
+            </if>
+            <if test="catalogName != null">
+                SERVICE_NAME = #{catalogName,jdbcType=VARCHAR},
+            </if>
+            <if test="treeLevel != null">
+                TREE_LEVEL = #{treeLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="catalogRemark != null">
+                CONFIG_REMARK = #{catalogRemark,jdbcType=VARCHAR},
+            </if>
+                UPDATETIME = SYSTIMESTAMP
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+
+    <select id="queryCatalogById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_CONFIG
+        where ID =
+        #{id,jdbcType=DECIMAL}
+    </select>
+
+    <select id="queryCatalogTree" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from serve_config where is_service = 0
+        <if test="catalogName != null">
+            AND SERVICE_NAME = #{catalogName,jdbcType=VARCHAR}
+        </if>
+        <if test="treeLevel != null">
+            AND TREE_LEVEL = #{treeLevel,jdbcType=DECIMAL}
+        </if>
+        <if test="isDeleted != null">
+            AND IS_DELETED = #{isDeleted,jdbcType=DECIMAL}
+        </if>
+        start with id = #{pid,jdbcType=DECIMAL} connect by prior id = parent_id
+         <if test="isInner != null">
+           and id not in (2,3)
+        </if>
+        order siblings by  parent_id asc,id asc
+    </select>
+
+    <select id="queryChildNum" resultType = "long">
+        select count(1) from serve_config where is_deleted = 0 and id != #{cataLogId} start with id=#{cataLogId} connect by prior id = parent_id
+    </select>
+    
+    <!--  根据子节点id获取父节点路径-->
+    <select id="queryParentCataLogById" resultMap="BaseResultMap">
+     SELECT <include refid="Base_Column_List" />
+        FROM SERVE_CONFIG  where is_service=0 and is_deleted = 0 start with id = #{childId,jdbcType=DECIMAL} connect by prior parent_id =id order by tree_level
+    </select>
+
+</mapper>

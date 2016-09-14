@@ -1,0 +1,224 @@
+/****************常用样式****************/
+body{font-family: Microsoft YaHei;}
+ul{padding: 0;margin: 0;}
+a,a:hover{cursor: pointer;}
+input[type="text"],input[type="search"]{padding: 0 4px;outline-width: 0;border: 1px solid #8c8c8c;}
+input,button,select{border:1px solid #ccc;}
+.row-fluid .blank-div{min-height: 15px;}
+div.DTE_Field input:focus, div.DTE_Field textarea:focus{background-color: #ffffff;}
+.clearfix{clear: both;}
+.fl{float: left !important;}
+.fr{float: right !important;}
+textarea{resize: none;}
+input[type="checkbox"]{min-height: 20px !important;}
+.btn.font-disabled{color: #d8d8d8 !important;
+background-color: #ffffff !important;}
+/*********************顶部菜单样式***********************/
+.rotate-dropdown-icon {
+    -webkit-transform: rotate(-90deg);/* Safari */
+    -moz-transform: rotate(-90deg);/* Firefox */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);/* Internet Explorer */
+}
+.dropdown-menu li > a {
+    font-size: 15px !important;
+}
+
+/***************datatable title****************/
+.portlet-title .caption a{color: #ffffff;}
+.portlet-title .caption a:hover{color:#C0C0C0;text-decoration: none;}
+.portlet-title .caption span{margin: 0 13px;}
+
+/***********bootstrap标准弹窗公共样式***********/
+.common-modal .modal-content{border:1px solid #A9A9A9;/*width: 75%;*/}
+.common-modal .modal-header{background-color:#365BB3;padding: 1em 2.5em;font-size: 16px;font-weight: 700;color: white; }
+.common-modal .modal-header .map{/*width: 21em;height: 14em;*/background: #FFF;}
+.common-modal .modal-header-normal{padding: 15px !important;}
+.common-modal .modal-header-normal .close{margin-right: 0 !important;}
+@media(min-width: 768px){
+    .common-modal .modal-dialog{width: 85%;/*margin-left: 20%;*/margin-top: 5%;}
+}
+.common-modal .modal-body-container{/*max-height: 400px;overflow-y: scroll;*/}
+.common-modal .modal-body-container .modal-body-nopadding{padding: 0;}
+.common-modal .modal-body-container .modal-body-nopadding .tab-content{margin: 10px;overflow-x: hidden;}
+.common-modal .modal-body-container .modal-body-nopadding .table-panel{padding-top: 10px;}
+.common-modal .modal-body-container .modal-body-nopadding .nav-tabs{background-color: #f5f5f5;border-bottom-width: 0;}
+.common-modal .modal-body-container .modal-body-nopadding .modal-tab{text-align:center;width: 15%;}
+.common-modal .modal-body-container .modal-body-nopadding .modal-tab a{color: #000000;margin-right: 0;background-color: #F5F5F5;border-width: 0}
+.common-modal .modal-body-container .modal-body-nopadding .modal-tab:hover{border-bottom-color: #f5f5f5;}
+.common-modal .modal-body-container .modal-body-nopadding .modal-tab-1{z-index: 3 !important;}
+.common-modal .modal-body-container .modal-body-nopadding .modal-tab-2{right: 6%;}
+.common-modal .modal-body-container .modal-body-nopadding .modal-tab.active{border-bottom: 5px solid #F55064;}
+.common-modal .modal-body-container .modal-body-nopadding .modal-tab a:hover,.common-modal .modal-body-container .modal-body-nopadding .modal-tab a:focus{background-color: inherit;border-width: 0;}
+.common-modal .modal-footer{text-align: center;}
+.common-modal .modal-footer .btn{background-color: #279AF0;color: #ffffff;padding: 1% 10%;margin: 0 3%;}
+.common-modal .modal-radio{line-height: 34px;margin-top: 9px;}
+.common-modal .modal-header .title-icon{text-align: right;}
+.common-modal .modal-header .title-icon i{font-size:5em}
+.common-modal .modal-header dl{margin-bottom: 10px;}
+.common-modal .modal-header dl dt{text-align: left !important;font-size: 0.9em;width: auto !important;font-weight: normal;}
+.common-modal .modal-header dl dd{margin-left: 7em !important;font-size: 0.9em;font-weight: normal;color: #9DAFDE;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+.common-modal .modal-content .edit-form label{font-weight: normal;color: #686868;position: relative;}
+.common-modal .modal-content .edit-form label span{position: relative;bottom: 4px;}
+.common-modal .modal-content textarea{border:1px solid #ccc;}
+.common-modal .modal-content .gis-modal-detail .col-sm-2{width: 17.666667% !important;}
+.common-modal .modal-content .gis-modal-detail .col-sm-4{width: 32.333333% !important;}
+.common-modal .modal-content .gis-modal-detail .form-group .control-label{padding-left: 0;}
+.common-modal .modal-content .form-group .modal-checkbox{width: 1.3em;height: 1.3em;margin-right: 5px;}
+.common-modal .modal-content .form-group .input-group .form-control{border:1px solid #ccc;background-color: #FBFBFB;text-align: right;height: 2.8em;}
+.common-modal .modal-content .form-group .input-group .input-group-addon{background-color: #FBFBFB;padding: 10px 17px;}
+.common-modal .modal-content .form-group .input-group .input-group-addon i{color: #959595;}
+.common-modal .modal-content .form-group .publish-authority-table{border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;}
+.common-modal .modal-content .form-group .publish-authority-table ul li{padding: 0.8em 0.5em 0.8em 2.5em;text-align: left;border-bottom: 1px solid #ccc;margin: 0 1em;cursor: pointer;}
+.common-modal .modal-content .form-group .publish-authority-table ul li:last-child{border-bottom-width: 0 !important;}
+.common-modal .modal-content .form-group .publish-authority-table ul li a{font-size: 1.4em;color: black;line-height: 1em;}
+.common-modal .modal-content .form-group .publish-authority-table-title{border:1px solid #ccc;height: 3.0em;line-height: 2.9em;padding-left: 2.0em;}
+.common-modal .modal-content .form-group .IP-list{border:1px solid #ccc;width: 100%;}
+.common-modal .modal-content #apiAuthorityTable th,.common-modal .modal-content #apiAuthorityTable td{text-align: center;}
+.common-modal .modal-content #apiAuthorityTree .list-group{border:1px solid #ccc;}
+.common-modal .modal-content #apiAuthorityTree .list-group-item{border-width: 0;}
+.common-modal .modal-content #apiAuthorityTable thead .sorting,.common-modal .modal-content #apiAuthorityTable thead .sorting_asc,.common-modal .modal-content #apiAuthorityTable thead .sorting_desc,.common-modal .modal-content #apiAuthorityTable thead .sorting_asc_disabled,.common-modal .modal-content #apiAuthorityTable thead .sorting_desc_disabled{background-position: 81% 58%;}
+.common-modal .modal-content #catalogAuthority{border:1px solid #ccc;}
+.common-modal .modal-content #catalogAuthority .treeview{width: 50%;}
+.common-modal .modal-content #catalogAuthority .treeview .checkbox-item{margin-right: 5px;margin-top: 3px;}
+
+/***********标准弹窗表格样式*************/
+/*.common-modal .modal-body-container .modal-body-nopadding table.dataTable,.common-modal .modal-body-container .modal-body-nopadding .input-group{border: 1px solid #CCCCCC;}*/
+.common-modal .modal-body-container .modal-body-nopadding table.dataTable th,.common-modal .modal-body-container .modal-body-nopadding table.dataTable td{border-right-width: 0;}
+.common-modal .modal-body-container .modal-body-nopadding .input-group input{height:2.0em;}
+.common-modal .modal-body-container .modal-body-nopadding .input-group .input-group-addon{padding: 5px 12px;}
+
+/**************条件查询*************/
+div.query-panel ul.log-query li{width: 30%;padding: 1% 1% 0 1%;}
+div.query-panel ul.log-query li label{width: 38%;}
+div.query-panel ul.log-query li select{width: 46%;}
+div.query-panel ul.log-query li input{width: 50%;}
+div.query-panel ul li{list-style: none;float: left;width: 23%;padding-top: 1%;  }
+div.query-panel ul li label{width: 25%;font-weight: 700;}
+div.query-panel ul li input{padding-left: 1%;width: 65%}
+div.query-panel ul li select{height: 2em;width: 63%;  }
+
+/***************表格****************/
+.dataTables_wrapper .dataTables_filter input{padding: 4px;}
+a.paginate_button.current,.dataTables_wrapper .dataTables_paginate .paginate_button{padding: 0.3em 0.8em !important;}
+.my-table .pagination ul>li{display:inline;}
+.my-table .pagination ul>li>a, .pagination ul>li>span {float: left;padding: 4px 12px;line-height: 20px;text-decoration: none;background-color: #fff;border: 1px solid #ddd;border-left-width: 0;}
+.my-table .DTE_Form_Buttons .edit-ok{right: 109%;top: -2px;border: none !important;background-image: none;background-color: white;-webkit-box-shadow:none;-moz-box-shadow: none;box-shadow: none; background-image: none !important;font-family: 'Glyphicons Halflings' !important;font-size:12px !important;color: #e02222;padding: 0 5px !important;margin: -2px 0 -6px 4px!important;}
+.my-table .DTE_Form_Buttons .edit-ok:hover{background-color: #ffffff !important;}
+.my-table div.DTE_Field input[type="text"]{padding: 0 4px;}
+.my-table table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected{background-color: #B0C4DE;}
+.query-table{margin-top: 10px !important;}
+.query-table thead th,.query-table thead td{padding: 8px !important;}
+.query-table>thead>tr>th,.query-table.no-footer{border-bottom-width: 0 !important;}
+
+/************* 表格每页记录数可选 ***************/
+#tab-content-body .dataTables_wrapper .dataTables_length{padding-left: 1%;padding-top:0.684em;margin-bottom: 2%;}
+#tab-content-body .dataTables_wrapper .dataTables_length label{font-weight: normal;}
+
+
+/*****************datatable弹窗****************/
+div.DTED_Lightbox_Wrapper div.DTED_Lightbox_Container div.DTED_Lightbox_Content_Wrapper div.DTED_Lightbox_Content{border:1px solid #ffb848;box-shadow: none;}
+div.DTED_Lightbox_Wrapper div.DTED_Lightbox_Container div.DTED_Lightbox_Content_Wrapper div.DTED_Lightbox_Content div.DTE div.DTE_Header{background-color:#ffb848;padding:8px 10px;min-height: 16.43px;height: auto;top: 0;left: 0;right: 0; }
+div.DTED_Lightbox_Wrapper div.DTED_Lightbox_Container div.DTED_Lightbox_Content_Wrapper div.DTED_Lightbox_Content div.DTE div.DTE_Footer{left: 0;right: 0;bottom: 0;background-color: #ffffff;border-top-width:0;height: auto;padding: 10px 20px; }
+div.DTE button.btn, div.DTE div.DTE_Form_Buttons button{padding: 4px 15px;border:1px solid #ffb848;background-image: none; }
+div.DTE_Body div.DTE_Body_Content div.DTE_Field{padding: 5px 5%;}
+div.DTE_Body div.DTE_Body_Content div.DTE_Field>label{width: 20%;}
+div.DTE_Body div.DTE_Body_Content div.DTE_Field>div.DTE_Field_Input{float: left;width: 63%;}
+div.DTE_Body div.DTE_Body_Content div.DTE_Field div.DTE_Field_InputControl>input{padding:3px 4px;outline-width:0;border: 1px solid #8c8c8c;width: 73%; }
+div.DTE_Body div.DTE_Body_Content div.DTE_Field div.DTE_Field_InputControl>select{outline-width:0;border: 1px solid #8c8c8c;width: 73%;padding:3px 4px; }
+div.DTED_Lightbox_Wrapper div.DTED_Lightbox_Container div.DTED_Lightbox_Content_Wrapper div.DTED_Lightbox_Content div.DTED_Lightbox_Close{border-radius: 15px !important;width: 18px;height: 18px;top: -8px;right: -6px;}
+div.DTED_Lightbox_Wrapper div.DTED_Lightbox_Container div.DTED_Lightbox_Content_Wrapper div.DTED_Lightbox_Content div.DTED_Lightbox_Close:after{line-height: 4px;}
+
+
+/*****************jquery validation engine 补充样式***************/
+div.common-form-error{position: static !important;float: right;padding-top: 0.5%;cursor: default;}
+div.common-form-error div.formErrorContent{min-width: inherit;}
+
+/*****************bootstrap treeview 补充样式***************/
+.list-group-item {z-index: 1;}
+
+/******************** form表单补充样式 ********************/
+.form-horizontal{color:#888888;font-size: 14px;}
+.container-full{margin: 2% 10%;padding-left:0;padding-right:0;}
+.container-full .form-horizontal{background-color: white;margin-bottom: 1.1em}
+.container-full .form-group{padding:1% 2%;margin-left:0;border-bottom:1px solid #E0E0E0;margin-bottom:0;width: 100%}
+.container-full .first-form-group{padding-top: 2.5%;}
+.container-full .form-group .control-label{font-weight: normal !important;font-size: 14px;}
+.container-full .form-group .input-sm{height: 2.5em;}
+.container-full .form-group .row{margin-left:0;margin-right:0;padding:0.5% 0;}
+.container-full .form-group .toggle-panel{ height:30px;line-height:26px;width: 35%;text-align: center;border: 1px solid #E0E0E0;margin: 0 31%;position: relative;top: 31px;background-color: white;}
+.container-full .form-group .toggle-panel span{line-height: 24px;}
+.container-full .form-group .toggle-panel .chevron-down-icon{margin-right: 1%;}
+.container-full .form-group .add-row-btn,.container-full .form-group .delete-row-btn{border-width:0;background-color:#ffffff;color: #279AF0;}
+.container-full .form-group .add-row-btn span,.container-full .form-group .delete-row-btn{font-size: 16px;}
+.container-full .form-group .btn-medium-blue-container{text-align: center;}
+.container-full .form-group .btn-medium-blue{border-width: 0;color: #ffffff;background-color: #279AF0;width: 13em;height: 2em;font-size: 1.1em;}
+.header-panel{padding:0.8% 10%;}
+.header-panel span,.header-panel a{font-size: 15px;}
+.container-full .form-group .table-striped>tbody>tr,.modal-form .form-group .table-striped>tbody>tr{background-color: #ffffff;}
+.container-full .form-group .table-striped>thead>tr,.modal-form .form-group .table-striped>thead>tr{background-color: #E4E4E4;}
+.container-full .form-group .delete-row{width: 7%;text-align: center;}
+.container-full .form-group .table,.modal-form .form-group .table{border-top: 1px solid #CCCCCC !important;border-left: 1px solid #E4E4E4 !important;}
+.container-full .form-group .table>thead>tr>th,.container-full .form-group .table>tbody>tr>td,.modal-form .form-group .table>thead>tr>th,.modal-form .form-group .table>tbody>tr>td{font-weight: normal;color: #212121;text-align: center;vertical-align: middle;}
+.container-full .form-group .table>thead>tr>th,.modal-form .form-group .table>thead>tr>th{border-bottom: 1px solid #CCCCCC !important;border-right: 1px solid #CCCCCC !important;}
+.container-full .form-group .table>tbody>tr>td,.modal-form .form-group .table>tbody>tr>td{font-size: 13px;border-bottom: 1px solid #E4E4E4 !important;border-right: 1px solid #E4E4E4 !important;}
+.container-full .form-group .table>tbody>tr>td>select,.modal-form .form-group .table>tbody>tr>td>select{height: 30px;padding: 0 12px;}
+.container-full .form-group .table .form-control-checkbox,.modal-form .form-group .table .form-control-checkbox{height: 1.3em;width: 1.3em;}
+.container-full .form-group .table .form-control-interval,.modal-form .form-group .table .form-control-interval{width: 17%;margin: 0 3%;border-width: 0;background-color: #F0F0F0;text-align: center;}
+.container-full .form-group .table>tbody>tr>td>a.active>.glyphicon-arrow-down,.container-full .form-group .table>tbody>tr>td>a.active>.glyphicon-arrow-up,.modal-form .form-group .table>tbody>tr>td>a.active>.glyphicon-arrow-down,.modal-form .form-group .table>tbody>tr>td>a.active>.glyphicon-arrow-up{color: #F55064;cursor: default;}
+.modal-form .form-group .table>tbody>tr>td>i{color: #F55064;}
+
+/***************** 列表 ******************/
+.container-apart{padding-top: 1%;}
+.container-apart .row-fluid .span12{margin-left: auto;}
+.container-apart .nav-menu-title{color: #717171;font-size: 1.2em;}
+.container-apart .nav-menu-title a{color: #717171;}
+.container-apart .nav-menu-title a span.arrow{color: #B9B9B9;}
+.container-apart .query-panel{background-color: #FBFBFB;margin-top: 1.5%;padding-bottom: 0.5%;margin-bottom: 1.5%;height: 9%;}
+.container-apart .query-panel .add-btn{background-color: #FBFBFB;border-width: 0;position: relative;left: 5%;}
+.container-apart .query-panel .add-btn .add-icon{font-size:2.7em;margin-bottom: 0.4em;margin-right: 0.4em;}
+.container-apart .query-panel .add-btn .btn-name{position: relative;font-size: 1.2em;line-height: 2px;top:-0.3em;}
+.container-apart .query-panel .query-btn{width: 7%;}
+.container-apart .query-panel .query-btn i{color: #959595;font-size: 1.9em;font-weight: normal;}
+.container-apart .query-panel li label{text-align: right;}
+.container-apart table.dataTable.no-footer,.container-apart table.dataTable thead th{border-bottom-width: 0;}
+.container-apart table.dataTable{border-top: 1px solid #CCCCCC;border-left: 1px solid #E4E4E4;}
+.container-apart table.dataTable th{background-color: #E4E4E4;font-weight: normal;border-right:1px solid #CCCCCC;border-bottom: 1px solid #CCCCCC;}
+.container-apart table.dataTable td{border-right:1px solid #E4E4E4;border-bottom: 1px solid #E4E4E4;}
+.container-apart table.dataTable td a{color: #000000;}
+.container-apart .portlet.box .portlet-body{background-color: inherit;padding: 0;}
+.table-bordered{border-width: 0;}
+.table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{border-width: 0;max-width: 19em;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+@media (min-width: 1024px){
+    .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{max-width: 10em;}
+}
+@media (min-width: 1280px){
+    .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{max-width: 17em;}
+}
+/****************** 左侧菜单 ******************/
+@media (min-width: 980px){
+    .page-content-offset{margin-left: 225px;}
+}
+ul.page-sidebar-menu > li{border-left: 5px solid #DCDDDF;color: #000000;}
+ul.page-sidebar-menu > li.active,ul.page-sidebar-menu > li:hover{border-left: 5px solid #F55064;}
+ul.page-sidebar-menu > li:focus{border-left: 5px solid #ffffff;}
+ul.page-sidebar-menu > li.active > a, ul.page-sidebar-menu > li.active > a:focus{background: #ffffff !important;color: #000000;font-size: 1.1em;}
+ul.page-sidebar-menu > li > a:hover{border-top: 1px solid #999999 !important;border-bottom:1px solid #999999 !important;}
+ul.page-sidebar-menu > li > a{padding: 23px 15px;}
+ul.page-sidebar-menu > li.active > a i{color: #000000;}
+
+/**************** popover style  ***********************/
+.page-content .secondary_menu{position: absolute;background-color: #ffffff;}
+.page-content .popover{margin-left:0;box-shadow: none;-webkit-box-shadow: none;border: 1px solid #999999 !important;max-width: none !important;padding-top: 1em;left: -5px;}
+.page-content .popover dl dt{width: auto;color: #707070;}
+.page-content .popover dl dt a{color: #707070;margin-right: 0.5em;font-family: "Microsoft YaHei";font-size: 13px;}
+.page-content .popover dl dd{margin-left: 10px;}
+.page-content .popover dl dd a{padding-left:0.6em;padding-right:0.6em;border-left: 1px solid #EAEAEA;color: #707070;font-family: "Microsoft YaHei";font-size: 13px;}
+
+/**************** 日志统计 ***********************/
+ul.log-statistics-menu,ul.log-statistics-menu > li{width: 100%;}
+ul.log-statistics-menu > li > a{padding: 14% 23% !important;}
+#tab-content-body .statistics-left-menu{background-color:#dcdddf;}
+#tab-content-body .statistics-content,#tab-content-body .statistics-left-menu{padding-left: 0;padding-right: 0;}
+
+/****************** 文本换行 ****************/
+.text-linefeed{white-space:normal !important;word-wrap: break-word !important;word-break: normal !important;overflow: auto !important;text-overflow: clip !important;}

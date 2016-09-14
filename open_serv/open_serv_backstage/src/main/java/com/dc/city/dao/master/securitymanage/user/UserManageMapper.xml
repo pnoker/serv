@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.securitymanage.user.UserManageMapper">
+    <resultMap id="BaseResultMap" type="com.dc.city.domain.securitymanage.user.ServeUser">
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+        <result column="USER_NAME_EVER" property="userNameEver" jdbcType="VARCHAR" />
+        <result column="NICK_NAME" property="nickName" jdbcType="VARCHAR" />
+        <result column="APP_KEY" property="appKey" jdbcType="VARCHAR" />
+        <result column="USEgetTotalCount" jdbcType="VARCHAR" />
+        <result column="USER_MOBILE" property="userMobile" jdbcType="VARCHAR" />
+        <result column="USER_CHANNEL" property="userChannel" jdbcType="DECIMAL" />
+        <result column="USER_REMARK" property="userRemark" jdbcType="VARCHAR" />
+        <result column="IS_DELETED" property="isDeleted" jdbcType="DECIMAL" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, USER_NAME, USER_NAME_EVER, NICK_NAME, USER_PASS, ENCRYPT_SALT, APP_KEY,
+        USER_EMAIL,
+        USER_MOBILE, USER_CHANNEL, USER_REMARK, IS_DELETED, CREATE_TIME, UPDATETIME
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_USER
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+        delete from SERVE_USER
+        where ID =
+        #{id,jdbcType=DECIMAL}
+    </delete>
+    <insert id="insert" parameterType="com.dc.city.domain.securitymanage.user.ServeUser">
+        insert into SERVE_USER (ID, USER_NAME, USER_NAME_EVER,
+        NICK_NAME, USER_PASS,
+        ENCRYPT_SALT,
+        APP_KEY, USER_EMAIL, USER_MOBILE,
+        USER_CHANNEL,
+        USER_REMARK, IS_DELETED,
+        CREATE_TIME, UPDATETIME)
+        values (#{id,jdbcType=DECIMAL},
+        #{userName,jdbcType=VARCHAR},
+        #{userNameEver,jdbcType=VARCHAR},
+        #{nickName,jdbcType=VARCHAR},
+        #{userPass,jdbcType=VARCHAR},
+        #{encryptSalt,jdbcType=VARCHAR},
+        #{appKey,jdbcType=VARCHAR},
+        #{userEmail,jdbcType=VARCHAR},
+        #{userMobile,jdbcType=VARCHAR},
+        #{userChannel,jdbcType=DECIMAL},
+        #{userRemark,jdbcType=VARCHAR},
+        #{isDeleted,jdbcType=DECIMAL},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updatetime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.dc.city.domain.securitymanage.user.ServeUser">
+        insert into SERVE_USER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="userName != null">
+                USER_NAME,
+            </if>
+            <if test="userNameEver != null">
+                USER_NAME_EVER,
+            </if>
+            <if test="nickName != null">
+                NICK_NAME,
+            </if>
+            <if test="userPass != null">
+                USER_PASS,
+            </if>
+            <if test="encryptSalt != null">
+                ENCRYPT_SALT,
+            </if>
+            <if test="appKey != null">
+                APP_KEY,
+            </if>
+            <if test="userEmail != null">
+                USER_EMAIL,
+            </if>
+            <if test="userMobile != null">
+                USER_MOBILE,
+            </if>
+            <if test="userChannel != null">
+                USER_CHANNEL,
+            </if>
+            <if test="userRemark != null">
+                USER_REMARK,
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userNameEver != null">
+                #{userNameEver,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPass != null">
+                #{userPass,jdbcType=VARCHAR},
+            </if>
+            <if test="encryptSalt != null">
+                #{encryptSalt,jdbcType=VARCHAR},
+            </if>
+            <if test="appKey != null">
+                #{appKey,jdbcType=VARCHAR},
+            </if>
+            <if test="userEmail != null">
+                #{userEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="userMobile != null">
+                #{userMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="userChannel != null">
+                #{userChannel,jdbcType=DECIMAL},
+            </if>
+            <if test="userRemark != null">
+                #{userRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.dc.city.domain.securitymanage.user.ServeUser">
+        update SERVE_USER
+        <set>
+            <if test="userName != null">
+                USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userNameEver != null">
+                USER_NAME_EVER = #{userNameEver,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                NICK_NAME = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPass != null">
+                USER_PASS = #{userPass,jdbcType=VARCHAR},
+            </if>
+            <if test="encryptSalt != null">
+                ENCRYPT_SALT = #{encryptSalt,jdbcType=VARCHAR},
+            </if>
+            <if test="appKey != null">
+                APP_KEY = #{appKey,jdbcType=VARCHAR},
+            </if>
+            <if test="userEmail != null">
+                USER_EMAIL = #{userEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="userMobile != null">
+                USER_MOBILE = #{userMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="userChannel != null">
+                USER_CHANNEL = #{userChannel,jdbcType=DECIMAL},
+            </if>
+            <if test="userRemark != null">
+                USER_REMARK = #{userRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.dc.city.domain.securitymanage.user.ServeUser">
+        update SERVE_USER
+        set USER_NAME =
+        #{userName,jdbcType=VARCHAR},
+        USER_NAME_EVER =
+        #{userNameEver,jdbcType=VARCHAR},
+        NICK_NAME =
+        #{nickName,jdbcType=VARCHAR},
+        USER_PASS =
+        #{userPass,jdbcType=VARCHAR},
+        ENCRYPT_SALT =
+        #{encryptSalt,jdbcType=VARCHAR},
+        APP_KEY =
+        #{appKey,jdbcType=VARCHAR},
+        USER_EMAIL =
+        #{userEmail,jdbcType=VARCHAR},
+        USER_MOBILE =
+        #{userMobile,jdbcType=VARCHAR},
+        USER_CHANNEL =
+        #{userChannel,jdbcType=DECIMAL},
+        USER_REMARK =
+        #{userRemark,jdbcType=VARCHAR},
+        IS_DELETED =
+        #{isDeleted,jdbcType=DECIMAL},
+        CREATE_TIME =
+        #{createTime,jdbcType=TIMESTAMP},
+        UPDATETIME =
+        #{updatetime,jdbcType=TIMESTAMP}
+        where ID =
+        #{id,jdbcType=DECIMAL}
+    </update>
+
+
+    <!-- 新增用户 -->
+    <insert id="createUser" parameterType="userManagePo" keyProperty="id" keyColumn="ID">
+        insert
+        into SERVE_USER (USER_NAME,
+        NICK_NAME, USER_PASS, ENCRYPT_SALT,
+        APP_KEY,
+        USER_EMAIL,
+        USER_MOBILE,
+        USER_CHANNEL, USER_REMARK, IS_DELETED, CREATE_TIME)
+        values
+        (#{userName,jdbcType=VARCHAR},
+        #{nickName,jdbcType=VARCHAR},
+        #{userPassWord,jdbcType=VARCHAR}, #{encryptSalt,jdbcType=VARCHAR},
+        #{appKey,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, #{userMobile,jdbcType=VARCHAR},
+        #{userChannel,jdbcType=DECIMAL}, #{userRemark,jdbcType=VARCHAR},
+        #{isDeleted,jdbcType=DECIMAL}, systimestamp)
+    </insert>
+
+
+    <!-- 编辑用户 -->
+    <update id="modifyUser" parameterType="userManagePo">
+        update SERVE_USER
+        set
+        NICK_NAME = #{nickName,jdbcType=VARCHAR},
+        APP_KEY =  #{appKey,jdbcType=VARCHAR},
+        USER_EMAIL = #{userEmail,jdbcType=VARCHAR},
+        USER_MOBILE = #{userMobile,jdbcType=VARCHAR},
+        USER_REMARK = #{userRemark,jdbcType=VARCHAR},
+        <if test="userPassWord != null and userPassWord != ''">
+            USER_PASS =
+            #{userPassWord,jdbcType=VARCHAR},
+            ENCRYPT_SALT =
+            #{encryptSalt,jdbcType=VARCHAR},
+        </if>
+        UPDATETIME = systimestamp
+        where ID = #{id}
+    </update>
+
+
+    <!-- 用户是否存在 -->
+    <select id="queryUserIsExist" resultType="java.util.HashMap">
+        select to_char(count(1)) as USER_EXIST_COUNT
+        from SERVE_USER where
+        SERVE_USER.USER_NAME=#{userName,jdbcType=VARCHAR}
+    </select>
+
+
+    <!-- 查询活跃用户 -->
+    <select id="queryActiveUsers" resultType="usersCachePo">
+        select
+        ID, USER_NAME as USERNAME,APP_KEY as
+        APPKEY,USER_CHANNEL as USERCHANNEL,
+        x.VIEWPERMISSIONS,y.ACCESSPERMISSIONS
+        from SERVE_USER su
+        left outer join
+        (
+        select
+        USER_ID,
+        listagg(SERVICE_ID,',') within GROUP (order by null)as
+        VIEWPERMISSIONS
+        from
+        SERVE_USER_AUTHORITY
+        where VIEW_PERMISSION = 1
+        group by USER_ID
+        ) x on
+        x.USER_ID = su.ID
+        left
+        outer join
+        (
+        select
+        USER_ID,
+        listagg(SERVICE_ID,',') within GROUP (order by
+        null)as
+        ACCESSPERMISSIONS
+        from SERVE_USER_AUTHORITY
+        where ACCESS_PERMISSION = 1
+        group by USER_ID
+        ) y on
+        y.USER_ID = su.ID
+        where IS_DELETED = 0
+    </select>
+
+
+    <!-- 通过serviceCode查询配置表 -->
+    <select id="queryServeConfigByServiceCode" resultType="serveConfigPo">
+        SELECT
+        SERVICE_CODE AS
+        SERVICECODE,IS_SERVICE as ISSERVICE,
+        NVL(VERIFY_ACCESS,0) AS
+        VERIFYACCESS,
+        NVL(VERIFY_VIEW,0)
+        AS
+        VERIFYVIEW,
+        SUBSTR(SYS_CONNECT_BY_PATH(ID,','),2,LENGTH(SYS_CONNECT_BY_PATH(ID,','))) AS
+        ALLPATH
+        FROM
+        SERVE_CONFIG
+        WHERE SERVICE_CODE = #{serviceCode}
+        START WITH SERVE_CONFIG.ID = 1
+        CONNECT BY
+        PRIOR ID= PARENT_ID
+    </select>
+
+
+
+    <!-- 通过appKey查询用户权限 -->
+    <select id="queryActiveUsersByAppKey" resultType="usersCachePo">
+        select
+        ID, USER_NAME as USERNAME,
+        x.VIEWPERMISSIONS,y.ACCESSPERMISSIONS
+        from SERVE_USER su
+        left
+        outer join
+        (
+        select
+        USER_ID,
+        listagg(SERVICE_ID,',') within GROUP (order by null)as
+        VIEWPERMISSIONS
+        from SERVE_USER_AUTHORITY
+        where VIEW_PERMISSION = 1
+        <if test="appKey != null and appKey != ''">
+            AND USER_ID =
+            (SELECT ID FROM SERVE_USER WHERE APP_KEY = #{appKey} AND IS_DELETED
+            = 0)
+        </if>
+        group by USER_ID
+        ) x on x.USER_ID = su.ID
+        left outer join
+        (
+        select
+        USER_ID,
+        listagg(SERVICE_ID,',') within GROUP (order by null)as ACCESSPERMISSIONS
+        from
+        SERVE_USER_AUTHORITY
+        where ACCESS_PERMISSION = 1
+        <if test="appKey != null and appKey != ''">
+            AND USER_ID =
+            (SELECT ID FROM SERVE_USER WHERE APP_KEY = #{appKey} AND IS_DELETED
+            = 0)
+        </if>
+        group by USER_ID
+        ) y on y.USER_ID = su.ID
+        where IS_DELETED = 0
+        <if test="appKey != null and appKey != ''">
+            AND APP_KEY = #{appKey}
+        </if>
+    </select>
+
+
+    <!-- 查询用户列表 -->
+    <select id="queryUserByAppKey" resultType="usersCachePo">
+        select ID, USER_NAME as USERNAME,APP_KEY as
+        APPKEY,USER_CHANNEL as USERCHANNEL
+        from SERVE_USER WHERE IS_DELETED=0 AND
+        APP_KEY = #{appKey}
+    </select>
+
+    <!-- 通过serviceId查询user -->
+    <select id="queryUserByServiceId" resultType="UserManagePo">
+        select distinct Y.ID,Y.APP_KEY as APPKEY
+        from SERVE_USER_AUTHORITY X
+        inner join
+        SERVE_USER Y ON X.USER_ID = Y.ID
+        where X.SERVICE_ID =
+        #{serviceId}
+    </select>
+
+    <select id="getTotalCount" resultType="Long">
+        select count(1) from SERVE_USER where 1 = 1 AND IS_DELETED=0
+        <if test="id !=null and id >0">
+            and ID = #{id}
+        </if>
+        <if test="userName != null">
+            <bind name="userName_pattern" value="userName + '%'" />
+            AND USER_NAME like #{userName_pattern}
+        </if>
+        <if test="appKey != null">
+            <bind name="appKey_pattern" value="appKey + '%'" />
+            and APP_KEY like #{appKey_pattern}
+        </if>
+        <if test="userChannel > 0">
+            and USER_CHANNEL = #{userChannel}
+        </if>
+        <if test="beginDate != null">
+            and to_date(to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd
+            hh24:mi:ss') >=
+            to_date(#{beginDate},'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endDate != null">
+            <![CDATA[ and  to_date(to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') <= to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss') ]]>
+        </if>
+    </select>
+
+    <!-- 查询用户列表 -->
+    <select id="queryUser" resultType="userManagePo">
+        select ID, USER_NAME as USERNAME,NICK_NAME as NICKNAME,APP_KEY as APPKEY,
+        USER_CHANNEL as
+        USERCHANNEL,USER_EMAIL as USEREMAIL, USER_MOBILE as USERMOBILE,
+        USER_REMARK as
+        USERREMARK,to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss') as CREATETIME
+        from SERVE_USER esr
+        where esr.IS_DELETED = 0 and esr.rowid in
+        (
+        select rid from
+        (
+        select rownum rn,rid from
+        (
+        select
+        rowid rid from SERVE_USER
+        where IS_DELETED = 0
+        <if test="id !=null and id >0">
+            and ID = #{id}
+        </if>
+        <if test="userName != null">
+            <bind name="userName_pattern" value="userName + '%'" />
+            AND USER_NAME like #{userName_pattern}
+        </if>
+        <if test="appKey != null">
+            <bind name="appKey_pattern" value="appKey + '%'" />
+            and APP_KEY like #{appKey_pattern}
+        </if>
+        <if test="userChannel > 0 ">
+            and USER_CHANNEL = #{userChannel}
+        </if>
+        <if test="beginDate != null">
+            and to_date(to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd
+            hh24:mi:ss') >=
+            to_date(#{beginDate},'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endDate != null">
+                            <![CDATA[ and  to_date(to_char(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') <= to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss') ]]>
+        </if>
+        order by UPDATETIME desc
+        ) where  <![CDATA[  rownum <= #{endRowNum} ]]>
+        ) where rn > #{beginRowNum}
+        )
+        order by esr.UPDATETIME desc
+    </select>
+
+
+    <!-- 删除用户 -->
+    <delete id="removeUser">
+        UPDATE SERVE_USER SET USER_NAME_EVER = USER_NAME,USER_NAME = NULL,IS_DELETED =
+        1
+        where ID = #{id}
+    </delete>
+
+    <!-- 用户服务接口与目录授权 -->
+    <insert id="createUserAuthorization" parameterType="java.util.List">
+        insert into SERVE_USER_AUTHORITY ( USER_ID, SERVICE_ID, VIEW_PERMISSION, ACCESS_PERMISSION )
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator="union all">
+            select
+            #{item.userId,jdbcType=DECIMAL}, #{item.serviceId,jdbcType=DECIMAL},
+            #{item.viewPermission,jdbcType=DECIMAL}, #{item.accessPermission,jdbcType=DECIMAL}
+            from
+            dual
+        </foreach>
+    </insert>
+
+
+    <!-- 删除用户授权 -->
+    <delete id="removeUserAuthorization">
+        DELETE FROM SERVE_USER_AUTHORITY
+        <where>
+            <if test="userId > 0">
+                AND USER_ID = #{userId}
+            </if>
+            <if test="serviceId > 0">
+                AND SERVICE_ID in (select id from serve_config start with id = #{serviceId}
+                connect by prior id =
+                parent_id)
+            </if>
+        </where>
+    </delete>
+
+    <!-- 查询用户列表 -->
+    <select id="queryUserByUserIds" resultType="userManagePo">
+        select ID, USER_NAME as USERNAME,APP_KEY as APPKEY,USER_CHANNEL as USERCHANNEL from
+        SERVE_USER WHERE ID in
+        <foreach item="item" index="index" collection="userIds" open="(" separator=","
+            close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryUserAuths" resultType="serveUserAuthority">
+        select ID,SERVICE_ID as serviceId, user_id as
+        USERID,view_permission as
+        viewPermission,access_permission as accessPermission
+        from
+        SERVE_USER_AUTHORITY
+        where
+        user_id=#{userId} order by SERVICE_ID 
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dc.city.dao.master.datasource.ServeDataSourceMapper">
+    <resultMap id="BaseResultMap" type="com.dc.city.domain.datasource.ServeDataSource">
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="SOURCE_NAME" property="sourceName" jdbcType="VARCHAR" />
+        <result column="SOURCE_TYPE" property="sourceType" jdbcType="DECIMAL" />
+        <result column="SOURCE_CLASS" property="sourceClass" jdbcType="VARCHAR" />
+        <result column="SOURCE_URL" property="sourceUrl" jdbcType="VARCHAR" />
+        <result column="SOURCE_USER" property="sourceUser" jdbcType="VARCHAR" />
+        <result column="SOURCE_PASS" property="sourcePass" jdbcType="VARCHAR" />
+        <result column="SOURCE_REMARK" property="sourceRemark" jdbcType="VARCHAR" />
+        <result column="IS_DELETED" property="isDeleted" jdbcType="DECIMAL" />
+        <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, SOURCE_NAME, SOURCE_TYPE, SOURCE_CLASS, SOURCE_URL, SOURCE_USER, SOURCE_PASS,
+        SOURCE_REMARK,IS_DELETED, UPDATETIME
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_DATA_SOURCE
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+
+    <!-- 查询黑名单 -->
+    <select id="queryDataSourceList" resultMap="BaseResultMap" resultType="serveDataSource">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM SERVE_DATA_SOURCE source
+        where source.rowid in
+        (
+        select rid from
+        (
+        select rownum rn,rid from
+        (
+        select rowid rid from SERVE_DATA_SOURCE
+        where 1 = 1
+        <if test="sourceType != null and sourceType >= 0 ">
+            AND SOURCE_TYPE = #{sourceType,jdbcType=DECIMAL}
+        </if>
+        <if test="sourceRemark != null">
+            AND SOURCE_REMARK = #{sourceRemark,jdbcType=VARCHAR}
+        </if>
+        <if test="isDeleted != null and isDeleted >= 0">
+            AND IS_DELETED = #{isDeleted,jdbcType=DECIMAL}
+        </if>
+        <if test="id != null and id > 0">
+            AND ID = #{id,jdbcType=DECIMAL}
+        </if>
+                order by is_deleted asc, UPDATETIME desc
+        ) where  <![CDATA[  rownum < #{endRowNum} ]]>
+        ) where rn >= #{beginRowNum}
+        )
+        order by source.is_deleted asc, source.UPDATETIME desc
+    </select>
+
+
+    <!-- 获取总条数 -->
+    <select id="getTotalCount" resultType="long">
+        select count(1) from SERVE_DATA_SOURCE
+        where 1 = 1
+        <if test="sourceType != null and sourceType >= 0 ">
+            AND SOURCE_TYPE = #{sourceType,jdbcType=DECIMAL}
+        </if>
+        <if test="sourceRemark != null">
+            AND SOURCE_REMARK = #{sourceRemark,jdbcType=VARCHAR}
+        </if>
+        <if test="isDeleted != null and isDeleted >= 0">
+            AND IS_DELETED = #{isDeleted,jdbcType=DECIMAL}
+        </if>
+        <if test="id != null and id > 0">
+            AND ID = #{id,jdbcType=DECIMAL}
+        </if>
+    </select>
+
+    <select id="queryDataSources" resultMap="BaseResultMap" parameterType="com.dc.city.domain.datasource.ServeDataSource">
+        select
+        <include refid="Base_Column_List" />
+        from SERVE_DATA_SOURCE
+        where 1 = 1
+        <if test="sourceType != null and sourceType >= 0 ">
+            AND SOURCE_TYPE = #{sourceType,jdbcType=DECIMAL}
+        </if>
+        <if test="sourceRemark != null">
+            AND SOURCE_REMARK = #{sourceRemark,jdbcType=VARCHAR}
+        </if>
+        <if test="isDeleted != null and isDeleted >= 0">
+            AND IS_DELETED = #{isDeleted,jdbcType=DECIMAL}
+        </if>
+        <if test="id != null and id > 0">
+            AND ID = #{id,jdbcType=DECIMAL}
+        </if>
+        ORDER BY IS_DELETED ASC, UPDATETIME DESC
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        delete from SERVE_DATA_SOURCE
+        where ID =
+        #{id,jdbcType=DECIMAL}
+    </delete>
+    <!-- 添加黑名单 -->
+    <insert id="createDataSource" parameterType="dataSourceManagePo" useGeneratedKeys="true"
+        keyProperty="id" keyColumn="ID">
+        insert into SERVE_DATA_SOURCE (SOURCE_NAME,
+        SOURCE_TYPE,
+        SOURCE_CLASS, SOURCE_URL, SOURCE_USER,
+        SOURCE_PASS, SOURCE_REMARK,IS_DELETED,UPDATETIME)
+        values
+        (#{sourceName,jdbcType=VARCHAR},
+        #{sourceType,jdbcType=DECIMAL},
+        #{sourceClass,jdbcType=VARCHAR},
+        #{sourceUrl,jdbcType=VARCHAR},
+        #{sourceUser,jdbcType=VARCHAR},
+        #{sourcePass,jdbcType=VARCHAR},
+        #{sourceRemark,jdbcType=VARCHAR},#{isDeleted,jdbcType=DECIMAL},SYSTIMESTAMP)
+    </insert>
+    <insert id="insert" parameterType="com.dc.city.domain.datasource.ServeDataSource">
+        insert into SERVE_DATA_SOURCE (SOURCE_NAME,
+        SOURCE_TYPE,
+        SOURCE_CLASS, SOURCE_URL, SOURCE_USER,
+        SOURCE_PASS, SOURCE_REMARK,IS_DELETED)
+        values
+        (#{sourceName,jdbcType=VARCHAR}, #{sourceType,jdbcType=DECIMAL},
+        #{sourceClass,jdbcType=VARCHAR}, #{sourceUrl,jdbcType=VARCHAR},
+        #{sourceUser,jdbcType=VARCHAR},
+        #{sourcePass,jdbcType=VARCHAR},
+        #{sourceRemark,jdbcType=VARCHAR},#{isDeleted,jdbcType=DECIMAL})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.dc.city.domain.datasource.ServeDataSource">
+        update SERVE_DATA_SOURCE
+        <set>
+            <if test="sourceName != null">
+                SOURCE_NAME = #{sourceName,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceType != null">
+                SOURCE_TYPE = #{sourceType,jdbcType=DECIMAL},
+            </if>
+            <if test="sourceClass != null">
+                SOURCE_CLASS = #{sourceClass,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceUrl != null">
+                SOURCE_URL = #{sourceUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceUser != null">
+                SOURCE_USER = #{sourceUser,jdbcType=VARCHAR},
+            </if>
+            <if test="sourcePass != null">
+                SOURCE_PASS = #{sourcePass,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceRemark != null">
+                SOURCE_REMARK = #{sourceRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+            </if>
+            UPDATETIME = SYSTIMESTAMP
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+
+   
+
+</mapper>

@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd ">
+
+    <!-- 引入CXF Bean定义如下,早期的版本中使用 -->
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+    <bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper">
+        <!-- json的日期格式 如果不需要这种格式，就在实例类的属性 get方法上面加 上类似的注解 @JsonSerialize(using = JsonDateSerializer_YMDHMS.class) -->
+        <property name="serializationConfig.dateFormat">
+            <bean class="java.text.SimpleDateFormat">
+                <constructor-arg value="yyyy-MM-dd HH:mm:ss" />
+            </bean>
+        </property>
+        <!-- json 空值（null）要转换成的值 -->
+        <property name="serializerProvider.nullValueSerializer">
+            <bean class="com.dc.city.util.JsonNullValueSerializer">
+                <constructor-arg value="" />
+            </bean>
+        </property>
+    </bean>
+
+    <jaxrs:server>
+        <jaxrs:serviceBeans>
+            <!--数据库操作 -->
+            <ref bean="sqlOperationController" />
+            <!--数据源管理 -->
+            <ref bean="dataSourceManageController" />
+            <!--数据库信息查询 -->
+            <ref bean="dataBaseInfoController" />
+            <!-- 样例 -->
+            <ref bean="testDemoController" />
+            <!-- 黑名单管理 -->
+            <ref bean="blackListManageController" />
+            <!-- 用户管理 -->
+            <ref bean="userManageController" />
+            <!-- mongodb log日志管理 -->
+            <ref bean="serveVisitLogController" />
+            <!-- mongodb log日志查询 -->
+            <ref bean="logQueryController" />
+            <!-- 服务配置等 -->
+            <ref bean="configerController" />
+            <!-- 服务添加等 -->
+            <ref bean="addConfigerController" />
+            
+            <!--服务配置列表 -->
+            <ref bean="serveConfigQueryController" />
+            <!--服务配置列表 -->
+            <ref bean="catalogController" /> 
+            
+            <!-- 新登录 -->
+               <ref bean="newLoginController" /> 
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" p:mapper-ref="jacksonMapper" />
+            <bean class="com.dc.city.common.exception.InvokeFaultExceptionMapper" />
+        </jaxrs:providers>
+        <jaxrs:extensionMappings>
+            <entry key="xml" value="application/xml" />
+            <entry key="json" value="application/json" />
+            <entry key="jsonp" value="application/javascript" />
+        </jaxrs:extensionMappings>
+
+    </jaxrs:server>
+
+
+
+</beans>
